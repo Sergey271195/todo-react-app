@@ -1,0 +1,1 @@
+web: gunicorn bitrix_project.wsgi
