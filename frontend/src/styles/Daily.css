@@ -1,0 +1,79 @@
+.dailyTasksDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+}
+
+a {
+    text-decoration: none;
+    outline-style: none;
+    color: black;
+}
+
+a:hover {
+    color: slateblue;
+}
+
+.mainDailyDiv {
+    width: 80%
+}
+
+.dailyDiv {
+    margin-left: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    flex-wrap: wrap;
+    width: 80%;
+}
+
+.wrapperDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.taskStateDiv {
+    cursor: pointer;
+    border-right: 20px solid slateblue;
+}
+.taskStateDiv.completed {
+    border-right: 20px solid lightgreen;
+}
+
+
+.dailyDiv.completed{
+    text-decoration: line-through;
+}
+
+
+.titleDiv {
+    font-size: 16px;
+    overflow-wrap: break-word;
+}
+
+.commentList {
+    width: 100%;
+    overflow-wrap: anywhere;
+    list-style-type: none;
+}
+
+.commentInput {
+    margin-top: 10px;
+    border: none;
+    border-bottom: 2px solid white;
+    font-style:italic;
+}
+
+
+.commentInput:active {
+    outline: none;
+    border-bottom: 2px solid slateblue;
+}
+
+.commentInput:focus {
+    outline: none;
+    border-bottom: 2px solid slateblue;
+}

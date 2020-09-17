@@ -1,0 +1,29 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%
+}
+.employeeListDiv {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 25%;
+    height: 100%;
+}
+
+.employeeDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    padding: 10px;
+    background-color: white;
+    border-bottom: 1px solid whitesmoke;
+    cursor: pointer;
+    
+}
+
+.employeeDiv:hover {
+    background-color: rgba(248, 248, 255, 1);
+}

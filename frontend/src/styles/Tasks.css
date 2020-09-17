@@ -1,0 +1,55 @@
+.usersTasksDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+}
+.addNewTaskDiv {
+    background-color: azure;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 5px;
+    margin: 10px;
+}
+.tasksDiv {
+    font-size: 15px;
+    margin: 10px;
+    background-color: rgba(240, 248, 255, 1);
+    cursor: pointer;
+    padding: 10px;
+    width: 50%;
+    overflow-wrap: anywhere;
+}
+
+.tasksDiv:hover {
+    background-color: rgba(240, 255, 240, 1);
+}
+
+.tasksDivActive {
+    font-size: 15px;
+    margin: 10px;
+    background-color: rgba(240, 255, 240, 1);
+    cursor: pointer;
+    padding: 10px;
+    width: 50%;
+    overflow-wrap: anywhere;
+}
+
+.tasksDivActive:hover {
+    background-color: rgba(240, 248, 255, 1);
+}
+
+.hideModal {
+    display: none;
+}
+
+.newTaskForm {
+    display: flex;
+    flex-direction: column;
+    width: 80%
+}
+
+.formTag {
+    width: 70%
+}
