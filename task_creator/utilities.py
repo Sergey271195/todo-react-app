@@ -9,7 +9,7 @@ class EmployeeManager():
         self.bitrix = bitrix
         self.mainemployee = [1, 26, 334, 370, 240, 262, 34, 416, 352, 330]
 
-    def check_for_new_emloyee(self,):
+    def check_for_new_emloyee(self):
         users_list = self.bitrix.get_all_users(["ID", "NAME", "LAST_NAME"])
         for user in users_list:
             id_, first_name, last_name = user
@@ -114,3 +114,8 @@ class TaskManager():
         fields = {'TITLE': title, 'RESPONSIBLE_ID': employee, 'CREATED_BY': employee, 'STATUS': 3, 'DESCRIPTION': ''}
         new_task = self.bitrix.add_task(fields)
         return new_task
+
+if __name__ == "__main__":
+    bitrix = BitrixIntegrator()
+    empManager = EmployeeManager(bitrix)
+    empManager.check_for_new_emloyee()
