@@ -107,6 +107,6 @@ media/
 *.db
 
 node_modules/
-static/
+static/templates
 backup/
 bitrix/
