@@ -23,14 +23,13 @@ class EmployeeManager():
             is_main = False
             db_user = Employee.objects.filter(bitrix_id = int(id_))
             if not db_user:
-                if id_ in self.mainemployee:
+                if int(id_) in self.mainemployee:
                     is_main = True
                 full_name = last_name + " " + first_name
                 employee = Employee(bitrix_id = int(id_), first_name = first_name, last_name = last_name, full_name = full_name, is_main = is_main)
                 employee.save()
             else:
                 full_name = last_name + " " + first_name
-                #db_user.update(full_name = full_name)
                 print(db_user.values())
 
     def delete_employee(self, id_):

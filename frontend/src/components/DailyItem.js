@@ -1,12 +1,24 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useState, useRef} from 'react'
 import { DailyContext } from './context/DailyTasksContext'
 
 import {postFetch} from './Utils'
 
 const DailyTask = ({title, comments, completed, pk, index, employee, emplId, taskId}) => {
 
-    const {dispatchDaily} = useContext(DailyContext)
+    const {dailyTasks, dispatchDaily} = useContext(DailyContext)
     const [comment, setComment] = useState({})
+
+    const moveUp = (index) => {
+        if (index != 0) {
+            dispatchDaily({type: 'MOVE_UP', employee: employee, index: index})
+        }
+    }
+
+    const moveDown = (index) => {
+        if (index != dailyTasks.tasks[employee].length -1) {
+            dispatchDaily({type: 'MOVE_DOWN', employee: employee, index: index})
+        }
+    }
 
     const onSubmitHandle = (event) => {
 
@@ -36,25 +48,33 @@ const DailyTask = ({title, comments, completed, pk, index, employee, emplId, tas
 
 
     return (
-        <div className = {`dailyDiv ${completed ? 'completed': ''}`}>
-            <div className = {`wrapperDiv ${completed ? 'completed': ''}`} >
-                <div className = 'titleDiv'>
-                    <a href = {`https://illuminator3000.bitrix24.ru/company/personal/user/${emplId}/tasks/task/view/${taskId}/`}
-                            target = '_blank'>{`${index+1}. ${title}`}</a>
-                </div>
-                <div className = {`taskStateDiv ${completed ? 'completed': ''}`} onClick = {() => completeTask()}></div>
+        <div style = {{display: 'flex'}}>
+
+            <div style = {{display: 'flex', flexDirection: 'column'}}>
+                <button onClick = {() => moveUp(index)} className = 'moveBtn'>&#8593;</button>
+                <button onClick = {() => moveDown(index)} className = 'moveBtn'>&#8595;</button>
             </div>
-            <ul className = 'commentList'>
-                {comments.map((comment, index) => {
-                    return <CommentItem key = {index} comment = {comment}/>
-                })}
-                <li>
-                    <form onSubmit = {(event) => onSubmitHandle(event)}>
-                        <input className = 'commentInput' type = 'text' id = {pk}
-                            onChange = {(event) => setComment(event.target.value)} placeholder = 'Комментарий...'/>
-                    </form>
-                </li>
-            </ul>
+            <div className = {`dailyDiv ${completed ? 'completed': ''}`}>
+                <div className = {`wrapperDiv ${completed ? 'completed': ''}`} >
+                    <div className = 'titleDiv'>
+                        <a href = {`https://illuminator3000.bitrix24.ru/company/personal/user/${emplId}/tasks/task/view/${taskId}/`}
+                                target = '_blank'>{`${index+1}. ${title}`}</a>
+                    </div>
+                    <div className = {`taskStateDiv ${completed ? 'completed': ''}`} onClick = {() => completeTask()}></div>
+                </div>
+                <ul className = 'commentList'>
+                    {comments.map((comment, index) => {
+                        return <CommentItem key = {index} comment = {comment}/>
+                    })}
+                    <li>
+                        <form onSubmit = {(event) => onSubmitHandle(event)}>
+                            <input className = 'commentInput' type = 'text' id = {pk}
+                                onChange = {(event) => setComment(event.target.value)} placeholder = 'Комментарий...'/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            
         </div>
     )
 }

@@ -27,10 +27,12 @@ a:hover {
     font-size: 15px;
     flex-wrap: wrap;
     width: 80%;
+    padding-left: 10px;
+    /* border-bottom: 2px solid slateblue; */
 }
 
-.dailyDiv.draggable {
-    
+.dailyDiv.drag {
+    position: absolute;
 }
 
 .wrapperDiv {
@@ -80,4 +82,18 @@ a:hover {
 .commentInput:focus {
     outline: none;
     border-bottom: 2px solid slateblue;
+}
+
+.moveBtn {
+    outline: none;
+    border: none;
+    border-right: 2px solid slateblue;
+    background-color: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 15px;
+}
+.moveBtn:active {
+    border-right: 2px solid black;
 }

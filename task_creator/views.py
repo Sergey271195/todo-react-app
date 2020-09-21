@@ -6,6 +6,7 @@ from django.forms.models import model_to_dict
 from django.utils import timezone
 import datetime
 import json
+import os
 
 from .serializers import EmployeeSerializer, TaskSerializer, DailyTaskConnectorSerializer, CommentSerialzier
 from .models import Employee, Task, DailyTaskConnector, DailyTaskList, Comment
@@ -14,13 +15,15 @@ from .utilities import EmployeeManager, TaskManager, not_found_response, success
 from task_creator.bitrix24 import BitrixIntegrator
 
 
-###FOR TEST##########
+
 def get_last_task_index(employee_id):
     today = timezone.now().date()
     print( DailyTaskConnector.objects.filter(task_list__date = today))
     last_index = DailyTaskConnector.objects.filter(employee_id__bitrix_id = employee_id, task_list__date = today).aggregate(Max('priority'))
     return last_index['priority__max'] if last_index['priority__max'] else 0
 
+
+###FOR TEST##########
 def sort_priorities(employee_id, old_priority, new_priority):
     updated_task = DailyTaskConnector.objects.get(employee_id__id = employee_id, priority = old_priority)
     if new_priority > old_priority:
@@ -182,7 +185,10 @@ def completeTaskView(request, pk):
 def userManagerView(request):
     
     if request.method == 'GET':
-        employees = Employee.objects.all()
+        if os.environ.get('DEBUG') == 'True':
+            employees = Employee.objects.all()
+        else:
+            employees = Employee.objects.filter(is_main = True)
         serialzer = EmployeeSerializer(employees, many = True)
         return JsonResponse(serialzer.data, safe = False, json_dumps_params={'ensure_ascii': False})
 
@@ -199,6 +205,21 @@ def userManagerView(request):
 
     #######################################
 
+
+@csrf_exempt
+def shiftTasksView(request):
+
+    bitrix = BitrixIntegrator()
+    tskManager = TaskManager(bitrix)
+        
+
+    if request.method == 'POST':
+        request_body = json.loads(request.body)
+        todolist = tskManager.get_todolist()
+        for user in request_body:
+            for index, task in enumerate(request_body[user]):
+                DailyTaskConnector.objects.filter(task_list= todolist, task__bitrix_id = int(task['taskId'])).update(priority = index + 1)
+        return success_response()
 
 
 def createUser(data):

@@ -1,12 +1,19 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { DailyContext } from './context/DailyTasksContext'
 import DailyTask from './DailyItem'
+
+import {postFetch} from './Utils'
 
 import '../styles/Daily.css'
 
 const DailyTasksList = () => {
 
     const {dailyTasks} = useContext(DailyContext)
+
+    useEffect(() => {
+        postFetch({url: `api/tasks/shift`, data: dailyTasks.tasks})
+            .then(data => console.log(data))
+    }, [dailyTasks])
 
     return (
         <div className = 'dailyTasksDiv'>

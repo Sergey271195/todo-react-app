@@ -24,6 +24,18 @@ export const DailyTasksReducer = (state, action) => {
             })
             return {...state}
         }
+        case 'MOVE_UP': {
+            const temp = state.tasks[action.employee][action.index - 1]
+            state.tasks[action.employee][action.index - 1] = state.tasks[action.employee][action.index]
+            state.tasks[action.employee][action.index] = temp
+            return {...state}
+        }
+        case 'MOVE_DOWN': {
+            const temp = state.tasks[action.employee][action.index + 1]
+            state.tasks[action.employee][action.index + 1] = state.tasks[action.employee][action.index]
+            state.tasks[action.employee][action.index] = temp
+            return {...state}
+        }
         default:
             return state
     }
