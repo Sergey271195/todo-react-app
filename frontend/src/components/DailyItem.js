@@ -1,6 +1,8 @@
 import React, {useContext, useState} from 'react'
 import { DailyContext } from './context/DailyTasksContext'
 
+import {postFetch} from './Utils'
+
 const DailyTask = ({title, comments, completed, pk, index, employee, emplId, taskId}) => {
 
     const {dispatchDaily} = useContext(DailyContext)
@@ -11,18 +13,13 @@ const DailyTask = ({title, comments, completed, pk, index, employee, emplId, tas
         event.preventDefault()
         if (comment !== undefined && comment !== '') {
             document.getElementById(`${pk}`).value = ''
-            fetch(`api/tasks/comment${pk}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json;charset=utf-8'},
-                body: JSON.stringify({comment: comment})
-            }).then((response) => {return response.json()})
-            .then((data) => {
-                if (data.status_code == 200) {
-                    dispatchDaily({type: 'ADD_COMMENT', index: index, employee: employee, comment: comment})
-                    setComment('')
-                }
-            })
-            
+            postFetch({url: `api/tasks/comment${pk}`, data: {comment: comment}})
+                .then((data) => {
+                    if (data.status == 200) {
+                        dispatchDaily({type: 'ADD_COMMENT', index: index, employee: employee, comment: comment})
+                        setComment('')
+                    }
+                })
         }
     }
 

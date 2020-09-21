@@ -33,7 +33,7 @@ class BitrixIntegrator():
             response = request.json()
             return response
         else:
-            return 'Status 404'
+            return 'status 404'
 
     def get_next(self, query, start, cache):
 
@@ -45,7 +45,7 @@ class BitrixIntegrator():
             if next_:
                 self.get_next(query, next_, cache)
         else:
-            return 'Status 404'
+            return 'status 404'
 
     def get_all_users(self, selectParam):
 

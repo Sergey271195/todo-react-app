@@ -54,6 +54,7 @@ class DailyTaskConnectorSerializer(serializers.Serializer):
     employee_id = EmployeeSerializer()
     task_list = DailyTaskListSerializer()
     task = TaskSerializer()
+    priority = serializers.IntegerField()
     comments = serializers.SerializerMethodField()
     completed = serializers.BooleanField()
 

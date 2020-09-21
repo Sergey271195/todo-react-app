@@ -6,3 +6,20 @@ export const fetchDataHandler = ({task: {bitrix_id: taskId, title},
             pk, completed, comments
         }
 }
+
+export const postFetch = ({url, data}) => {
+    return fetch(url, {
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json;charset=utf-8'},
+        body: JSON.stringify(data)
+        }).then(response => response.json())
+}
+
+export const saveToLocalStorage = ({key, data}) => {
+    localStorage.setItem(key, JSON.stringify(data))
+}
+
+export const getFromLocalStorage = (key) => {
+    const data = localStorage.getItem(key)
+    return data ? JSON.parse(data): data 
+}

@@ -4,7 +4,7 @@ import { EmployeeContext } from "./context/EmployeeContext";
 import '../styles/EmployeeList.css'
 import { DailyContext } from "./context/DailyTasksContext";
 import { MainEmployee } from "./context/MainEmployeeContext";
-import {fetchDataHandler} from './Utils'
+import {fetchDataHandler, saveToLocalStorage } from './Utils'
 
 
 
@@ -14,6 +14,11 @@ const EmployeeList = ({setToggleMain}) => {
     const {dispatchDaily} = useContext(DailyContext)
     const {employee, setEmployee} = useContext(MainEmployee)
     const [toggleMenu, setToggleMenu] = useState(true);
+
+    const returnToMain = () => {
+        localStorage.removeItem('employee')
+        setToggleMain(true)
+      }
 
     const fetchUsers = () => {
         fetch(`api/users`)
@@ -75,11 +80,11 @@ const EmployeeList = ({setToggleMain}) => {
         return (
             <div className = {toggleMenu ? 'employeeListDiv': 'employeeListDiv'} >
             {/* <div className = 'employeeDiv' onClick = {() => setToggleMenu(false)}>Скрыть</div> */}
-            <div className = 'employeeDiv' onClick = {() => setToggleMain(true)}>Главная</div>
+            <div className = 'employeeDiv' onClick = {() => returnToMain()}>Главная</div>
             {employee.map(({bitrix_id: emplId, full_name: fullName}) => {
                 return <div key = {emplId} className = 'employeeDiv'
                          onClick = {() => {
-                             setToggleMain(false),
+                             setToggleMain(false)
                              getUsersTasks(emplId)
                             }}>
                             {fullName}

@@ -29,6 +29,10 @@ a:hover {
     width: 80%;
 }
 
+.dailyDiv.draggable {
+    
+}
+
 .wrapperDiv {
     display: flex;
     justify-content: space-between;

@@ -25,6 +25,7 @@ class DailyTaskConnector(models.Model):
     employee_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
     task_list = models.ForeignKey(DailyTaskList, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    priority = models.IntegerField(default = 0)
     completed = models.BooleanField(default = False)
 
 class Comment(models.Model):

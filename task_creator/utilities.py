@@ -1,7 +1,14 @@
+from django.http import JsonResponse
 from .models import Employee, Task, DailyTaskConnector, DailyTaskList
 from task_creator.bitrix24 import BitrixIntegrator
 
 import datetime
+
+def not_found_response():
+    return JsonResponse({'status': 404})
+
+def success_response():
+    return JsonResponse({'status': 200})
 
 class EmployeeManager():
 
@@ -18,11 +25,13 @@ class EmployeeManager():
             if not db_user:
                 if id_ in self.mainemployee:
                     is_main = True
-                full_name = first_name + " " + last_name
+                full_name = last_name + " " + first_name
                 employee = Employee(bitrix_id = int(id_), first_name = first_name, last_name = last_name, full_name = full_name, is_main = is_main)
                 employee.save()
             else:
-                print(user[1], user[2], 'already exists')
+                full_name = last_name + " " + first_name
+                #db_user.update(full_name = full_name)
+                print(db_user.values())
 
     def delete_employee(self, id_):
         try:

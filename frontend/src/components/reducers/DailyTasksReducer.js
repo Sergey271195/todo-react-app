@@ -12,6 +12,12 @@ export const DailyTasksReducer = (state, action) => {
             state.tasks[action.task.fullName] = (state.tasks[action.task.fullName] === undefined) ? [action.task] : [...state.tasks[action.task.fullName], action.task]
             return {tasks: state.tasks, tasksId: [...state.tasksId, action.task.taskId]}
         }
+        case 'REMOVE_FROM_DAILY': {
+            let fullName = action.fullName
+            const reduced_tasks = state.tasks[fullName].filter(task => task.taskId != action.taskId)           
+            const reduced_ids = state.tasksId.filter(id => id != action.taskId)
+            return {tasks: {[fullName]: reduced_tasks}, tasksId: reduced_ids}
+        }
         case 'TOGGLE_TASK': {
             state.tasks[action.employee] = state.tasks[action.employee].map(task => {
                 return task.pk == action.pk ? {...task, completed: !task.completed} : task

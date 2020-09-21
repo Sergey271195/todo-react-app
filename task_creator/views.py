@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import F, Func
+from django.db.models import F, Max
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
@@ -10,8 +10,37 @@ import json
 from .serializers import EmployeeSerializer, TaskSerializer, DailyTaskConnectorSerializer, CommentSerialzier
 from .models import Employee, Task, DailyTaskConnector, DailyTaskList, Comment
 
-from .utilities import EmployeeManager, TaskManager
+from .utilities import EmployeeManager, TaskManager, not_found_response, success_response
 from task_creator.bitrix24 import BitrixIntegrator
+
+
+###FOR TEST##########
+def get_last_task_index(employee_id):
+    today = timezone.now().date()
+    print( DailyTaskConnector.objects.filter(task_list__date = today))
+    last_index = DailyTaskConnector.objects.filter(employee_id__bitrix_id = employee_id, task_list__date = today).aggregate(Max('priority'))
+    return last_index['priority__max'] if last_index['priority__max'] else 0
+
+def sort_priorities(employee_id, old_priority, new_priority):
+    updated_task = DailyTaskConnector.objects.get(employee_id__id = employee_id, priority = old_priority)
+    if new_priority > old_priority:
+        update_values = {
+            'range': (old_priority, new_priority),
+            'shift': -1
+        }
+    else:
+        update_values = {
+            'range': (new_priority, old_priority),
+            'shift': 1
+        }    
+    tasks_to_update = DailyTaskConnector.objects.get(employee_id__id = employee_id,
+        priority__range = (update_values.get('range'))).update(priority = F('priority') + update_values.get('shift'))
+    updated_task.update(priority = new_priority)
+    all_tasks = DailyTaskConnector.objects.filter(employe_id__id = employee_id)
+    print(all_tasks)
+####################
+
+
 
 def createComment(connector, comment):
     new_comment = Comment(task_connector = connector, content = comment)
@@ -39,12 +68,14 @@ def removeTaskFromDailyList(task_id, todolist):
         
 
 
-def addTaskToDailyList(task, todolist, employee_id, comment = None):
+def addTaskToDailyList(task, todolist, employee_id, priority, comment = None):
+    print(priority)
     try:
         connector = DailyTaskConnector.objects.get(task = task, task_list = todolist)
     except DailyTaskConnector.DoesNotExist:
         employee = Employee.objects.get(bitrix_id = employee_id)
-        connector = DailyTaskConnector(employee_id = employee, task_list = todolist, task = task)
+        connector = DailyTaskConnector(employee_id = employee, task_list = todolist, task = task, priority = priority)
+        print(connector.__dict__)
         connector.save()
         if comment:
             createComment(connector = connector, comment = comment)
@@ -56,7 +87,7 @@ def dailyTaskManagerView(request):
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
     empManager = EmployeeManager(bitrix)
-    daily_tasks = tskManager.get_daily_tasks()
+    daily_tasks = tskManager.get_daily_tasks().order_by('priority')
     serializer = DailyTaskConnectorSerializer(daily_tasks, many = True)
     return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
 
@@ -66,43 +97,74 @@ def commentManagerView(request, pk):
     request_body = json.loads(request.body)
     comment = request_body.get('comment')
     createComment(connector = connector, comment = comment)
-    return JsonResponse({'status_code': 200})
+    return success_response()
 
 
 @csrf_exempt
-def taskManagerView(request, pk):
+def addTaskView(request, emplId):
 
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
 
     if request.method == 'GET':
-        users_tasks = bitrix.get_all_user_tasks(pk)
-        return JsonResponse(users_tasks, safe = False, json_dumps_params={'ensure_ascii': False})
+        try:
+            users_tasks = bitrix.get_all_user_tasks(emplId)
+            return JsonResponse(users_tasks, safe = False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return not_found_response()
 
     if request.method == 'POST':
         request_body = json.loads(request.body)
-        employee_id = pk
-        comment = request_body.get('comment')
         action = request_body.get('action')
         task_id = int(request_body.get('taskId'))
-        if action == 'Add':
+        if action == 'Remove':
+            try:
+                todolist = tskManager.get_todolist()
+                task_to_remove = DailyTaskConnector.objects.filter(task__bitrix_id = task_id, task_list = todolist)
+                task_to_remove.delete()
+                return success_response()
+            except DailyTaskConnector.DoesNotExist:
+                return not_found_response()
+        elif action == 'Add':
             try:
                 db_task = Task.objects.get(bitrix_id = task_id)
             except Task.DoesNotExist:
                 bitrix_response = bitrix.get_task_by_id(task_id)
                 task = bitrix_response['result']['task']
                 db_task = addExistingTask(task)
-        elif action == 'Create':
-            bitrix_response = tskManager.create_task(employee = employee_id, title = request_body.get('title'))
-            task = bitrix_response['result']['task']
-            db_task = addExistingTask(task)
+            if db_task:
+                priority = get_last_task_index(db_task.employee_id.bitrix_id) + 1
+                print(priority)
+                todolist = tskManager.get_todolist()
+                new_task = addTaskToDailyList(task = db_task, todolist = todolist, priority = priority, employee_id = emplId)
+                if new_task:
+                    new_task.data['status'] = 200
+                    return JsonResponse(new_task.data, safe = False, json_dumps_params={'ensure_ascii': False})
+        return not_found_response()
+
+@csrf_exempt
+def createTaskView(request, emplId):
+
+    bitrix = BitrixIntegrator()
+    tskManager = TaskManager(bitrix)
+
+    if request.method == 'POST':
+        request_body = json.loads(request.body)
+        todolist = tskManager.get_todolist()
+        print(request_body)
+        bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'))
+        
+        task = bitrix_response['result']['task']
+        db_task = addExistingTask(task)
         if db_task:
             todolist = tskManager.get_todolist()
-            new_task = addTaskToDailyList(task = db_task, todolist = todolist, employee_id = employee_id, comment = comment)
+            priority = get_last_task_index(emplId) + 1
+            new_task = addTaskToDailyList(task = db_task, todolist = todolist, employee_id = emplId, priority = priority, comment = request_body.get('comment'))
             if new_task:
+                new_task.data['status'] = 200
                 return JsonResponse(new_task.data, safe = False, json_dumps_params={'ensure_ascii': False})
 
-        return JsonResponse({'task': 404})
+        return not_found_response()
 
 
 @csrf_exempt
@@ -111,9 +173,9 @@ def completeTaskView(request, pk):
         db_task = DailyTaskConnector.objects.get(id = pk)
         db_task.completed = not db_task.completed
         db_task.save()
-        return JsonResponse({'status': 200})
+        return success_response()
     except Exception as e:
-        return JsonResponse({'status': 400})
+        return not_found_response()
 
 
 @csrf_exempt
