@@ -55,7 +55,7 @@ def addExistingTask(task):
         responsible = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('responsibleId')))).data
         creator = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('createdBy')))).data
         new_serializer = TaskSerializer(data = {'employee_id': responsible, 'creator_id': creator,
-        'bitrix_id': int(task.get('id')), 'title': task.get('title'), 'description': task.get('description')})
+        'bitrix_id': int(task.get('id')), 'title': task.get('title'), 'description': task.get('description', '')})
         if new_serializer.is_valid(raise_exception = True):
             db_task = new_serializer.save()
             return db_task
