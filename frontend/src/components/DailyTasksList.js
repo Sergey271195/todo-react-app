@@ -32,12 +32,13 @@ const DailyTasksList = () => {
                 const dailyList = prepareDailyList(data)
                 dispatchDaily({type: 'GET_DAILY', tasks: dailyList, tasksId: dailyTasksId})
                 setError(false)
+                setTimeout(setLoading, 100, false)
             }
             else {
                 setError(true)
+                setLoading(false)
             }
-            
-        }).then(setTimeout(setLoading, 100, false));
+        })
     }
 
     useEffect(() => {
