@@ -23,3 +23,11 @@ export const getFromLocalStorage = (key) => {
     const data = localStorage.getItem(key)
     return data ? JSON.parse(data): data 
 }
+
+export const getCurrentDate = () => {
+    const date = new Date()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const today = `${date.getFullYear()}-${month < 10 ? ('0' + month): month}-${day < 10 ? ('0' + day): day}`
+    return today
+}

@@ -5,8 +5,6 @@ export const EmployeeReducer = (state, action) => {
                 return action.emplData
             }
         case 'EXTEND_TASKS': {
-            console.log(state)
-            console.log(action)
             return {emplId: state.emplId, fullName: state.fullName, tasks: [...state.tasks, {taskId: action.task.taskId, title: action.task.title}]}
         }
         default:

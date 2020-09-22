@@ -84,10 +84,20 @@ class TaskManager():
             todolist.save()
             return todolist
 
-    def get_daily_tasks(self):
-        todolist = self.get_todolist()
-        daily_tasks = DailyTaskConnector.objects.filter(task_list = todolist).order_by('employee_id')
-        return daily_tasks
+    def get_todolist_by_date(self, date):
+        try:
+            todolist = DailyTaskList.objects.get(date = date)
+            return todolist
+        except DailyTaskList.DoesNotExist:
+            return None
+
+    def get_daily_tasks(self, date):
+        #todolist = self.get_todolist()
+        todolist = self.get_todolist_by_date(date)
+        if todolist:
+            daily_tasks = DailyTaskConnector.objects.filter(task_list = todolist).order_by('employee_id').order_by('priority')
+            return daily_tasks
+        return None
 
     def get_daily_tasks_by_user(self, employee_id):
         todolist = self.get_todolist()

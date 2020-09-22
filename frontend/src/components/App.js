@@ -10,6 +10,7 @@ import TasksList from "./TasksList";
 import MainEmployeeProvider from "./context/MainEmployeeContext";
 import { getFromLocalStorage } from './Utils';
 import UserLoadingProvider from "./context/UserLoadingContext";
+import CurrentDateProvider from "./context/DateContext";
 
 const App = () => {
 
@@ -24,10 +25,12 @@ const App = () => {
           <DailyContextProvider>
             <MainEmployeeProvider>
               <UserLoadingProvider>
-                <div className = 'mainDiv'>
-                  <EmployeeList setToggleMain = {setToggleMain}/>
-                  {toggleMain ? <DailyTasksList /> : <TasksList />}
-                </div>
+                <CurrentDateProvider>
+                  <div className = 'mainDiv'>
+                    <EmployeeList setToggleMain = {setToggleMain}/>
+                    {toggleMain ? <DailyTasksList /> : <TasksList />}
+                  </div>
+                </CurrentDateProvider>
               </UserLoadingProvider>
             </MainEmployeeProvider>
           </DailyContextProvider>

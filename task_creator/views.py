@@ -87,13 +87,15 @@ def addTaskToDailyList(task, todolist, employee_id, priority, comment = None):
         return serializer
 
 @csrf_exempt
-def dailyTaskManagerView(request):
+def dailyTaskManagerView(request, date):
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
     empManager = EmployeeManager(bitrix)
-    daily_tasks = tskManager.get_daily_tasks().order_by('priority')
-    serializer = DailyTaskConnectorSerializer(daily_tasks, many = True)
-    return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
+    daily_tasks = tskManager.get_daily_tasks(date)
+    if daily_tasks:
+        serializer = DailyTaskConnectorSerializer(daily_tasks, many = True)
+        return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
+    return not_found_response()
 
 @csrf_exempt
 def commentManagerView(request, pk):

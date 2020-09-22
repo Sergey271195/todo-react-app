@@ -6,28 +6,45 @@ import {postFetch, fetchDataHandler} from './Utils'
 
 import '../styles/Daily.css'
 import { UserLoading } from './context/UserLoadingContext'
+import { CurrentDate } from './context/DateContext'
+
+
 
 const DailyTasksList = () => {
 
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
+    const { currentDate, setCurrentDate } = useContext(CurrentDate)
     const { loadingUser } = useContext(UserLoading)
+
+    const fecthDailyTasks = () => {
+        setLoading(true)
+        fetch(`api/daily${currentDate}`)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (data.status != 404) {
+                const dailyTasksId = data.map(({task: {bitrix_id}}) => bitrix_id)
+                const dailyList = prepareDailyList(data)
+                dispatchDaily({type: 'GET_DAILY', tasks: dailyList, tasksId: dailyTasksId})
+                setError(false)
+            }
+            else {
+                setError(true)
+            }
+            
+        }).then(setLoading(false));
+    }
 
     useEffect(() => {
         postFetch({url: `api/tasks/shift`, data: dailyTasks.tasks})
     }, [dailyTasks])
 
+
     useEffect(() => {
-        setLoading(true)
-        fetch(`api/daily`)
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            const dailyTasksId = data.map(({task: {bitrix_id}}) => bitrix_id)
-            const dailyList = prepareDailyList(data)
-            dispatchDaily({type: 'GET_DAILY', tasks: dailyList, tasksId: dailyTasksId})
-        }).then(setLoading(false));
+        fecthDailyTasks()
     }, [])
 
     const prepareDailyList = (tasks) => {
@@ -43,18 +60,27 @@ const DailyTasksList = () => {
         <div className = 'dailyTasksDiv' style = {(loading || loadingUser) ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
             {(loading || loadingUser) ? <div className = 'loadingDiv'>Loading...</div>:
                 <>
-                    {Object.keys(dailyTasks.tasks).map((employee) => {
-                        return (
-                        <div key = {employee} className = 'mainDailyDiv'>
-                            <h2>{employee}</h2>
-                            {dailyTasks.tasks[employee].map((task, index) => {
+                    <form className = 'dateForm' onSubmit = {(event) => {event.preventDefault(), fecthDailyTasks()}}>
+                        <input className = 'dateInput' type = 'date' value = {currentDate} 
+                                onChange = {(event) => setCurrentDate(event.target.value)}/>
+                        <button className = 'dateBtn'>Выбрать дату</button>
+                    </form>
+                        {error ? <div className = 'loadingDiv' style = {{height: '100%'}}>{`< List not found />`}</div>:
+                            <>
+                            {Object.keys(dailyTasks.tasks).map((employee) => {
                                 return (
-                                    <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
-                                    )
+                                <div key = {employee} className = 'mainDailyDiv'>
+                                    <h2>{employee}</h2>
+                                    {dailyTasks.tasks[employee].map((task, index) => {
+                                        return (
+                                            <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
+                                            )
+                                    })}
+                                </div>
+                                )
                             })}
-                        </div>
-                        )
-                    })}
+                            </>
+                        }
                 </>
             }
         </div>

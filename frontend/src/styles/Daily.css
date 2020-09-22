@@ -106,3 +106,32 @@ a:hover {
     justify-content: center;
     align-items: center;
 }
+
+.dateForm {
+    display: flex;
+    width: 75%;
+    justify-content: start;
+    align-items: center;
+    padding: 10px;
+}
+
+.dateInput {
+    outline: none;
+    margin-right: 20px;
+    border: none;
+    border-bottom: 1px solid slateblue;
+    font-style:italic;
+}
+
+.dateBtn {
+    outline: none;
+    border: 2px solid white;
+    background-color: slateblue;
+    cursor: pointer;
+    padding: 8px;
+    color: white;
+}
+
+.dateBtn:active {
+    border: 2px solid black;
+}

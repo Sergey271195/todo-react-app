@@ -6,7 +6,7 @@ from task_creator.bitrix24 import BitrixIntegrator
 
 urlpatterns = [
     path('users/', userManagerView),
-    path('daily/', dailyTaskManagerView),
+    path('daily<str:date>/', dailyTaskManagerView),
     path('tasks/user<int:emplId>', addTaskView),
     path('tasks/comment<int:pk>', commentManagerView),
     path('tasks/complete<int:pk>', completeTaskView),
