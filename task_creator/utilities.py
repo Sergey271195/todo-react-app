@@ -19,6 +19,7 @@ class EmployeeManager():
     def check_for_new_emloyee(self):
         users_list = self.bitrix.get_all_users(["ID", "NAME", "LAST_NAME"])
         for user in users_list:
+            print(user)
             id_, first_name, last_name = user
             is_main = False
             db_user = Employee.objects.filter(bitrix_id = int(id_))
@@ -27,6 +28,7 @@ class EmployeeManager():
                     is_main = True
                 full_name = last_name + " " + first_name
                 employee = Employee(bitrix_id = int(id_), first_name = first_name, last_name = last_name, full_name = full_name, is_main = is_main)
+                print(employee)
                 employee.save()
             else:
                 full_name = last_name + " " + first_name
