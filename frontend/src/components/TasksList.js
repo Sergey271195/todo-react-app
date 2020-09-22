@@ -4,12 +4,13 @@ import { EmployeeContext } from './context/EmployeeContext';
 
 import '../styles/Tasks.css'
 import {fetchDataHandler, postFetch, saveToLocalStorage} from './Utils'
+import { UserLoading } from './context/UserLoadingContext';
 
 const TasksList = () => {
 
     const {currEmployee, dispatch} = useContext(EmployeeContext)
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
-    const [newTask, setNewTask] = useState(false)
+    const {loadingUser} = useContext(UserLoading)
     const [formData, setFormData] = useState({
         title: '',
         comment: ''
@@ -36,16 +37,18 @@ const TasksList = () => {
                 comment: formData.comment,
                 responsibleId: currEmployee.emplId
             }
-            console.log(data)
             postFetch({url: `api/tasks/create${currEmployee.emplId}`, data: data})
                 .then(data => {
-                    console.log(data)
                     if (data.status !== 404) {
                         const task = fetchDataHandler(data)
                         dispatchDaily({type: 'EXTEND_DAILY', task: task})
                         dispatch({type: 'EXTEND_TASKS', task: task})
                     }
                 })
+            setFormData({
+                title: '',
+                comment: ''
+            })
         }
     }
 
@@ -71,13 +74,13 @@ const TasksList = () => {
 
     if (currEmployee) {
         return (
-            <div className = 'usersTasksDiv'>
-
-            {/* MAIN */}
+            <div className = 'usersTasksDiv' style = {loadingUser ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
+            {loadingUser ? <div className = 'loadingDiv'>Loading...</div>: 
+                <>
                 <h2>{currEmployee.fullName}</h2>
 
-                <form className = 'formTag' /* method = 'POST' */ 
-                    onSubmit = {(event) => {console.log(formData), submitHandler(event)}}>
+                <form className = 'formTag' method = 'POST' 
+                    onSubmit = {(event) => submitHandler(event)}>
                         <textarea name = 'title' className = 'newTaskInput' placeholder = 'Новое задание...' 
                             value = {formData.title}
                             onChange = {(event) => {setFormData({...formData, title: event.target.value}), setValidationError(false)}}>
@@ -86,7 +89,7 @@ const TasksList = () => {
                             value = {formData.comment}
                             onChange = {(event) => setFormData({...formData, comment: event.target.value})}>
                         </textarea>
-                    <button className = 'addBtn' onClick = {() => {console.log(currEmployee)}}>+</button>
+                    <button className = 'addBtn'>+</button>
                 </form>
 
                 {currEmployee.tasks.map(({taskId, title}) => {
@@ -98,7 +101,8 @@ const TasksList = () => {
                                 {title}
                             </div>
                 })}
-
+            </>
+            }
             </div>
         )
     }

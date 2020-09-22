@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 75%;
+    height: 100%;
+    overflow-y: scroll;
 }
 .addNewTaskDiv {
     background-color: azure;

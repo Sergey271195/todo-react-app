@@ -1,3 +1,16 @@
 .mainDiv {
     display: flex;
+    height: 100%;
+    width: 100%;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: slateblue;
+  }
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
 }

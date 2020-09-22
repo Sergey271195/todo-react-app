@@ -2,18 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { EmployeeContext } from "./context/EmployeeContext";
 
 import '../styles/EmployeeList.css'
-import { DailyContext } from "./context/DailyTasksContext";
 import { MainEmployee } from "./context/MainEmployeeContext";
-import {fetchDataHandler, saveToLocalStorage } from './Utils'
+import { UserLoading } from "./context/UserLoadingContext";
 
 
 
 const EmployeeList = ({setToggleMain}) => {
 
     const {dispatch} = useContext(EmployeeContext)
-    const {dispatchDaily} = useContext(DailyContext)
     const {employee, setEmployee} = useContext(MainEmployee)
-    const [toggleMenu, setToggleMenu] = useState(true);
+    const {setLoadingUser} = useContext(UserLoading)
 
     const returnToMain = () => {
         localStorage.removeItem('employee')
@@ -21,12 +19,13 @@ const EmployeeList = ({setToggleMain}) => {
       }
 
     const fetchUsers = () => {
+        setEmployee({type: 'FETCH_USERS'})
         fetch(`api/users`)
         .then((response) => {
             return response.json();
         })
         .then((data) => {
-            setEmployee(data);
+            setEmployee({type: 'RETURN_USERS', data});
         });
     }
 
@@ -34,29 +33,8 @@ const EmployeeList = ({setToggleMain}) => {
         fetchUsers()
     }, [])
 
-    useEffect(() => {
-        fetch(`api/daily`)
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            const dailyTasksId = data.map(({task: {bitrix_id}}) => bitrix_id)
-            const dailyList = prepareDailyList(data)
-            dispatchDaily({type: 'GET_DAILY', tasks: dailyList, tasksId: dailyTasksId})
-        });
-    }, [])
-
-    const prepareDailyList = (tasks) => {
-        const dailyList = tasks.reduce((obj, taskObj) => {
-            const task = fetchDataHandler(taskObj)
-            obj[task.fullName] = (obj[task.fullName] === undefined) ?  [task] : [...obj[task.fullName], task]
-            return obj
-        }, {})
-        return dailyList
-    }
-
-
     const getUsersTasks = (id) => {
+        setLoadingUser(true)
         fetch(`/api/tasks/user${id}`)
         .then( response => response.json())
         .then( data => 
@@ -68,31 +46,33 @@ const EmployeeList = ({setToggleMain}) => {
                 }
                 return obj
         }, {}))
-        .then(emplData => dispatch({type: 'CHANGE_USER', emplData : emplData}))
+        .then(emplData => {
+                dispatch({type: 'CHANGE_USER', emplData : emplData})
+                setLoadingUser(false)
+                setToggleMain(false)
+            })
         }
 
 
-    if (employee.length == 0) {
-        return null
-    }
-
-    else {
-        return (
-            <div className = {toggleMenu ? 'employeeListDiv': 'employeeListDiv'} >
-            {/* <div className = 'employeeDiv' onClick = {() => setToggleMenu(false)}>Скрыть</div> */}
-            <div className = 'employeeDiv' onClick = {() => returnToMain()}>Главная</div>
-            {employee.map(({bitrix_id: emplId, full_name: fullName}) => {
-                return <div key = {emplId} className = 'employeeDiv'
-                         onClick = {() => {
-                             setToggleMain(false)
-                             getUsersTasks(emplId)
-                            }}>
-                            {fullName}
-                        </div>
-            })}
-            </div>
-        )
-    }
+    return (
+        <div className = 'employeeListDiv' >
+        
+        {(!employee || employee.loading) ? <div className = 'loadingDiv'>Loading...</div> : 
+            <>
+                <div className = 'employeeDiv' onClick = {() => returnToMain()}>Главная</div>
+                {employee.users.map(({bitrix_id: emplId, full_name: fullName}) => {
+                    return <div key = {emplId} className = 'employeeDiv'
+                            onClick = {() => {
+                                getUsersTasks(emplId)
+                                
+                                }}>
+                                {fullName}
+                            </div>
+                })}
+            </>
+        }
+        </div>
+    )
 }
 
 

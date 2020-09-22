@@ -87,15 +87,5 @@ class BitrixIntegrator():
 
 if __name__ == "__main__":
     bitrix = BitrixIntegrator()
-    print('Hi')
-    """ fields = {'TITLE': 'Тест', 'DESCRIPTION': 'Описание тестового задания', 'RESPONSIBLE_ID': 406, 'CREATED_BY': 406, 'STATUS': 3}
-    bitrix.add_task(fields) """
-    #print(bitrix.users_dict)
-    #print(bitrix.id_list)
-    #print(bitrix.execute_method('tasks.task.getFields'))
-    #NEW TASK FIELDS
-    #TITLE, DESCRIPTION, PRIORITY (2, 0, 1),  STSTUS (2), CREATED_BY(406), ESPONSIBLE_ID(406)
-    #req =  requests.get(url_user_task)
-    #print(req.json())
     
 

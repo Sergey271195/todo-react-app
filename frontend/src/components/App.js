@@ -9,6 +9,7 @@ import '../styles/App.css';
 import TasksList from "./TasksList";
 import MainEmployeeProvider from "./context/MainEmployeeContext";
 import { getFromLocalStorage } from './Utils';
+import UserLoadingProvider from "./context/UserLoadingContext";
 
 const App = () => {
 
@@ -22,10 +23,12 @@ const App = () => {
         <EmployeeContextProvider>
           <DailyContextProvider>
             <MainEmployeeProvider>
-              <div className = 'mainDiv'>
-                <EmployeeList setToggleMain = {setToggleMain}/>
-                {toggleMain ? <DailyTasksList /> : <TasksList />}
-              </div>
+              <UserLoadingProvider>
+                <div className = 'mainDiv'>
+                  <EmployeeList setToggleMain = {setToggleMain}/>
+                  {toggleMain ? <DailyTasksList /> : <TasksList />}
+                </div>
+              </UserLoadingProvider>
             </MainEmployeeProvider>
           </DailyContextProvider>
         </EmployeeContextProvider>

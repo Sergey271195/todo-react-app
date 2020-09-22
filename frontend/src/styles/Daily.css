@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 75%;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 a {
@@ -96,4 +98,11 @@ a:hover {
 }
 .moveBtn:active {
     border-right: 2px solid black;
+}
+
+.loadingDiv {
+    display: flex;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
 }
