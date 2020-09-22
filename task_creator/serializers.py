@@ -27,7 +27,7 @@ class TaskSerializer(serializers.Serializer):
     creator_id = EmployeeSerializer()
     bitrix_id = serializers.IntegerField()
     title = serializers.CharField(max_length = 100)
-    description = serializers.CharField(required=False, allow_blank = True)
+    description = serializers.CharField(required=False, allow_blank = True, allow_null = True)
     date_updated = serializers.DateTimeField(required=False)
 
     def create(self, vaildated_data):
