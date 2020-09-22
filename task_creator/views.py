@@ -52,6 +52,7 @@ def createComment(connector, comment):
 
 def addExistingTask(task):
     try:
+        print('Exisiting task')
         responsible = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('responsibleId')))).data
         creator = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('createdBy')))).data
         new_serializer = TaskSerializer(data = {'employee_id': responsible, 'creator_id': creator,
