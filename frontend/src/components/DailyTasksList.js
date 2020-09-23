@@ -7,7 +7,6 @@ import {postFetch, fetchDataHandler, getCurrentDate} from './Utils'
 
 import '../styles/Daily.css'
 import { UserLoading } from './context/UserLoadingContext'
-import { CurrentDate } from './context/DateContext'
 import UsernameTitle from './UsernameTitle'
 
 
@@ -69,7 +68,7 @@ const DailyTasksList = () => {
                         {Object.keys(dailyTasks.tasks).map((employee) => {
                             return (
                             <div key = {employee} className = 'mainDailyDiv'>
-                                <UsernameTitle employee = {employee} emplId = {1}/>
+                                <UsernameTitle employee = {employee} emplId = {dailyTasks.tasks[employee][0].emplId}/>
                                 {dailyTasks.tasks[employee].map((task, index) => {
                                     return (
                                         <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
