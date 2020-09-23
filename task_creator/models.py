@@ -7,6 +7,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length = 50)
     full_name = models.CharField(max_length = 50)
     is_main = models.BooleanField(default = False)
+    photo = models.CharField(max_length = 300, default = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg", blank=True, null=True)
 
 class Task(models.Model):
     employee_id = models.ForeignKey(Employee, related_name='employee', on_delete=models.CASCADE)

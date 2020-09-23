@@ -17,10 +17,9 @@ class EmployeeManager():
         self.mainemployee = [1, 26, 334, 370, 240, 262, 34, 416, 352, 330]
 
     def check_for_new_emloyee(self):
-        users_list = self.bitrix.get_all_users(["ID", "NAME", "LAST_NAME"])
+        users_list = self.bitrix.get_all_users(["ID", "NAME", "LAST_NAME", "PERSONAL_PHOTO"])
         for user in users_list:
-            print(user)
-            id_, first_name, last_name = user
+            id_, first_name, last_name, photo = user
             is_main = False
             db_user = Employee.objects.filter(bitrix_id = int(id_))
             if not db_user:
@@ -31,8 +30,12 @@ class EmployeeManager():
                 print(employee)
                 employee.save()
             else:
-                full_name = last_name + " " + first_name
-                print(db_user.values())
+                pass
+                """ if photo:
+                    db_user.update(photo = photo)
+                else:
+                    db_user.update(photo = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg")
+                print(db_user.values()) """
 
     def delete_employee(self, id_):
         try:

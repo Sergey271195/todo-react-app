@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { EmployeeContext } from "./context/EmployeeContext";
 
+import EmployeeHeader from './EmployeeHeader'
+
 import '../styles/EmployeeList.css'
 import { MainEmployee } from "./context/MainEmployeeContext";
 import { UserLoading } from "./context/UserLoadingContext";
@@ -59,13 +61,14 @@ const EmployeeList = ({setToggleMain}) => {
         
         {(!employee || employee.loading) ? <div className = 'loadingDiv'>Loading...</div> : 
             <>
-                <div className = 'employeeDiv' onClick = {() => returnToMain()}>Главная</div>
-                {employee.users.map(({bitrix_id: emplId, full_name: fullName}) => {
+                <EmployeeHeader returnToMain = {returnToMain}/>
+                {employee.users.map(({bitrix_id: emplId, full_name: fullName, photo}) => {
                     return <div key = {emplId} className = 'employeeDiv'
                             onClick = {() => {
                                 getUsersTasks(emplId)
                                 
                                 }}>
+                                <img style = {{height: '36px', width: '36px', borderRadius: '50%', marginRight: '28px'}} src = {photo} />
                                 {fullName}
                             </div>
                 })}

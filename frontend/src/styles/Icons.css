@@ -1,0 +1,36 @@
+.homeIcon {
+    cursor: pointer;
+    color: #1F1F1F
+}
+
+.homeIcon:hover {
+    color: #FDD835;
+}
+
+.HeaderDiv {
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 10px 30px 10px;
+}
+
+.filterUser {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid white;
+}
+
+.filterUser:focus {
+    border-bottom: 2px solid #FDD835;
+}
+.filterUser:hover {
+    border-bottom: 2px solid #FDD835;
+}
+.filterUser:active {
+    border-bottom: 2px solid #FDD835;
+}
+
+.searchIcon {
+    margin-right: 20px;
+}

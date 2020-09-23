@@ -10,6 +10,7 @@ class EmployeeSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length = 50)
     full_name = serializers.CharField(max_length = 50)
     is_main = serializers.BooleanField(default = False)
+    photo = serializers.CharField(max_length = 300)
 
     def create(self, vaildated_data):
         employee = Employee(**vaildated_data)

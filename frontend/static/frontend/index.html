@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Todo App</title>
 </head>
+{% load static %}
+<style>
+  @font-face {
+    font-family: "FuturaPT";
+    src: url("{% static 'frontend/FuturaPT-Book.ttf' %}");
+   }
+  body {
+    font-family: "FuturaPT";
+  }
+</style>
 <body>
     <div id="app" style = 'height: 100%; width: 100%'></div>
 </body>
-{% load static %}
 <script src="{% static 'frontend/main.js' %}"></script>
 </html>

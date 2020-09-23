@@ -1,6 +1,6 @@
 export const MainEmployeeReducer = (state, action) => {
     switch(action.type) {
-        case 'FECTH_USERS': {
+        case 'FETCH_USERS': {
             return {loading: true, users: []}
         }
         case 'RETURN_USERS': {

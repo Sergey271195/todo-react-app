@@ -7,6 +7,7 @@ import {postFetch, fetchDataHandler, getCurrentDate} from './Utils'
 import '../styles/Daily.css'
 import { UserLoading } from './context/UserLoadingContext'
 import { CurrentDate } from './context/DateContext'
+import UsernameTitle from './UsernameTitle'
 
 
 
@@ -63,17 +64,17 @@ const DailyTasksList = () => {
         <div className = 'dailyTasksDiv' style = {(loading || loadingUser) ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
             {(loading || loadingUser) ? <div className = 'loadingDiv'>Loading...</div>:
                 <>
-                    <form className = 'dateForm' onSubmit = {(event) => {event.preventDefault(), fecthDailyTasks()}}>
+                    {/* <form className = 'dateForm' onSubmit = {(event) => {event.preventDefault(), fecthDailyTasks()}}>
                         <input className = 'dateInput' type = 'date' value = {dateInput} 
                                 onChange = {(event) => setDateInput(event.target.value)}/>
                         <button className = 'dateBtn'>Выбрать дату</button>
-                    </form>
+                    </form> */}
                         {error ? <div className = 'loadingDiv' style = {{height: '100%'}}>{`< List not found />`}</div>:
                             <>
                             {Object.keys(dailyTasks.tasks).map((employee) => {
                                 return (
                                 <div key = {employee} className = 'mainDailyDiv'>
-                                    <h2>{employee}</h2>
+                                    <UsernameTitle employee = {employee} emplId = {1}/>
                                     {dailyTasks.tasks[employee].map((task, index) => {
                                         return (
                                             <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
