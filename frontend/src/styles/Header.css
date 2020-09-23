@@ -20,3 +20,27 @@
     padding: 5px;
     cursor: pointer;
 }
+
+.dateInput {
+    border: none;
+    outline: none;
+}
+
+
+::-webkit-datetime-edit { display: none }
+::-webkit-datetime-edit-fields-wrapper {  display: none }
+::-webkit-datetime-edit-text { display: none }
+::-webkit-datetime-edit-month-field {  display: none }
+::-webkit-datetime-edit-day-field {  display: none }
+::-webkit-datetime-edit-year-field { display: none }
+::-webkit-inner-spin-button { display: none; }
+::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    font-size: 16px;
+    content: url('https://api.iconify.design/bx:bx-calendar-week.svg');
+    padding: 10px;
+    vertical-align: -0.125em;
+    background: url('https://api.iconify.design/bx:bxs-circle.svg?color=%23FDD835') no-repeat center center / contain;
+    outline: none;
+    border:none;
+}

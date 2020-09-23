@@ -114,13 +114,6 @@ a:hover {
     padding: 10px;
 }
 
-.dateInput {
-    outline: none;
-    margin-right: 20px;
-    border: none;
-    border-bottom: 1px solid slateblue;
-    font-style:italic;
-}
 
 .dateBtn {
     outline: none;

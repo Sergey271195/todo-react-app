@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import { DailyContext } from './context/DailyTasksContext'
 import DailyTask from './DailyItem'
+import DateHeader from './DateHeader'
 
 import {postFetch, fetchDataHandler, getCurrentDate} from './Utils'
 
@@ -16,14 +17,11 @@ const DailyTasksList = () => {
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const { setCurrentDate } = useContext(CurrentDate)
     const { loadingUser } = useContext(UserLoading)
-    const [dateInput, setDateInput] = useState(getCurrentDate())
 
-    const fecthDailyTasks = () => {
+    const fetchDailyTasks = (date) => {
         setLoading(true)
-        setCurrentDate(dateInput)
-        fetch(`api/daily${dateInput}`)
+        fetch(`api/daily${date}`)
         .then((response) => {
             return response.json();
         })
@@ -48,7 +46,7 @@ const DailyTasksList = () => {
 
 
     useEffect(() => {
-        fecthDailyTasks()
+        fetchDailyTasks(getCurrentDate())
     }, [])
 
     const prepareDailyList = (tasks) => {
@@ -61,33 +59,31 @@ const DailyTasksList = () => {
     }
 
     return (
+        <>
+        <DateHeader fetchDailyTasks = {fetchDailyTasks}/>
         <div className = 'dailyTasksDiv' style = {(loading || loadingUser) ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
             {(loading || loadingUser) ? <div className = 'loadingDiv'>Loading...</div>:
                 <>
-                    {/* <form className = 'dateForm' onSubmit = {(event) => {event.preventDefault(), fecthDailyTasks()}}>
-                        <input className = 'dateInput' type = 'date' value = {dateInput} 
-                                onChange = {(event) => setDateInput(event.target.value)}/>
-                        <button className = 'dateBtn'>Выбрать дату</button>
-                    </form> */}
-                        {error ? <div className = 'loadingDiv' style = {{height: '100%'}}>{`< List not found />`}</div>:
-                            <>
-                            {Object.keys(dailyTasks.tasks).map((employee) => {
-                                return (
-                                <div key = {employee} className = 'mainDailyDiv'>
-                                    <UsernameTitle employee = {employee} emplId = {1}/>
-                                    {dailyTasks.tasks[employee].map((task, index) => {
-                                        return (
-                                            <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
-                                            )
-                                    })}
-                                </div>
-                                )
-                            })}
-                            </>
-                        }
+                    {error ? <div className = 'loadingDiv' style = {{height: '100%'}}>{`< List not found />`}</div>:
+                        <>
+                        {Object.keys(dailyTasks.tasks).map((employee) => {
+                            return (
+                            <div key = {employee} className = 'mainDailyDiv'>
+                                <UsernameTitle employee = {employee} emplId = {1}/>
+                                {dailyTasks.tasks[employee].map((task, index) => {
+                                    return (
+                                        <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />
+                                        )
+                                })}
+                            </div>
+                            )
+                        })}
+                        </>
+                    }
                 </>
             }
         </div>
+        </>
     )
 
 

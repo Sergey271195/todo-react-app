@@ -6,14 +6,14 @@ import EmployeeHeader from './EmployeeHeader'
 import '../styles/EmployeeList.css'
 import { MainEmployee } from "./context/MainEmployeeContext";
 import { UserLoading } from "./context/UserLoadingContext";
-
-
+import EmployeeListElement from "./EmployeeListElement";
 
 const EmployeeList = ({setToggleMain}) => {
 
     const {dispatch} = useContext(EmployeeContext)
     const {employee, setEmployee} = useContext(MainEmployee)
     const {setLoadingUser} = useContext(UserLoading)
+    const [filterUsers, setFilterUsers] = useState('')
 
     const returnToMain = () => {
         localStorage.removeItem('employee')
@@ -61,17 +61,13 @@ const EmployeeList = ({setToggleMain}) => {
         
         {(!employee || employee.loading) ? <div className = 'loadingDiv'>Loading...</div> : 
             <>
-                <EmployeeHeader returnToMain = {returnToMain}/>
+                <EmployeeHeader returnToMain = {returnToMain} setFilterUsers = {setFilterUsers} filterUsers = {filterUsers}/>
+
                 {employee.users.map(({bitrix_id: emplId, full_name: fullName, photo}) => {
-                    return <div key = {emplId} className = 'employeeDiv'
-                            onClick = {() => {
-                                getUsersTasks(emplId)
-                                
-                                }}>
-                                <img style = {{height: '36px', width: '36px', borderRadius: '50%', marginRight: '28px'}} src = {photo} />
-                                {fullName}
-                            </div>
+                    return <EmployeeListElement key = {emplId} emplId = {emplId} fullName = {fullName} photo = {photo}
+                        getUsersTasks = {getUsersTasks} filterUsers = {filterUsers}/>
                 })}
+
             </>
         }
         </div>

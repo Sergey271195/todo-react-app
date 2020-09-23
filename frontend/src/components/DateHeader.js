@@ -1,5 +1,4 @@
 import React, {useContext} from 'react'
-import { BiCalendarWeek } from "react-icons/bi"
 
 import '../styles/Header.css'
 import { CurrentDate } from './context/DateContext'
@@ -32,18 +31,18 @@ const Weekdays = {
 const formatDate = (date) => {
     const [year, month, day] = date.split('-')
     const monthName = Months[parseInt(month)].toLowerCase()
-    const weekday = new Date().getDay()
+    const weekday = new Date(date).getDay()
     return `${day} ${monthName} ${year} (${Weekdays[weekday]})`
 }
 
-const DateHeader = () => {
+const DateHeader = ({fetchDailyTasks}) => {
 
     const {currentDate, setCurrentDate} = useContext(CurrentDate)
-    formatDate(currentDate)
+
     return (
         <div className = 'headerDiv'>
             <div className = 'dateWeek'>{formatDate(currentDate)}</div>
-            <BiCalendarWeek className = 'dateIcon' size = '20px'/>
+            <input type = 'date' className = 'dateInput' onChange = {(event) => {setCurrentDate(event.target.value), fetchDailyTasks(event.target.value)}}/>
         </div>
     )
 }

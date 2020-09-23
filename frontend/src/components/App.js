@@ -30,7 +30,6 @@ const App = () => {
                   <div className = 'mainDiv'>
                     <EmployeeList setToggleMain = {setToggleMain}/>
                     <div className = 'contentDiv'>
-                      <DateHeader />
                       {toggleMain ? <DailyTasksList /> : <TasksList />}
                     </div>
                   </div>
