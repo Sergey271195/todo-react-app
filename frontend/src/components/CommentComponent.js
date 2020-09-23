@@ -2,10 +2,13 @@ import React, { useState, useContext } from 'react'
 
 import '../styles/CommentComponent.css'
 import { DailyContext } from './context/DailyTasksContext'
-import { postFetch } from './Utils'
+import { ModeContext } from './context/ModeContext'
+import { DARK, LIGHT, postFetch } from './Utils'
+
 
 const CommentComponent = ({comments, rightDate, pk, index, employee}) => {
 
+    const { mode } = useContext(ModeContext)
     const [commentInput, setCommentInput] = useState('')
     const { dispatchDaily } = useContext(DailyContext)
 
@@ -27,7 +30,7 @@ const CommentComponent = ({comments, rightDate, pk, index, employee}) => {
         <>
         {rightDate ?
             (<form  className = 'commentForm' method = 'POST' onSubmit = {(event) => submitComment(event)}>
-                <input className = 'commentInputForm' placeholder = 'Добавить комментарий' 
+                <input className = 'commentInputForm' placeholder = 'Добавить комментарий' style = {mode ? DARK: LIGHT}
                     onChange = {(event) => setCommentInput(event.target.value)} value = {commentInput}/>
             </form>)
             : <></>

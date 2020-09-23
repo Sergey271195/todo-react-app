@@ -20,13 +20,13 @@ html, body {
     justify-content: start;
     font-size: 18px;
     padding: 10px;
-    color: #1F1F1F;
     cursor: pointer;
     margin-left: 100px;
+    border-left: 2px solid transparent
 }
 
 .employeeDiv:hover {
-    background-color: rgba(248, 248, 255, 1);
+    border-left: 2px solid #FDD835;
 }
 
 

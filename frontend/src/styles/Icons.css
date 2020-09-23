@@ -1,14 +1,18 @@
 .homeIcon {
     cursor: pointer;
-    color: #1F1F1F
 }
 
 .homeIcon:hover {
     color: #FDD835;
 }
 
+.modeIcon {
+    cursor: pointer;
+    margin-right: 20px;
+}
+
 .HeaderDiv {
-    margin-left: 100px;
+    margin-left: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -18,7 +22,7 @@
 .filterUser {
     outline: none;
     border: none;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid transparent;
 }
 
 .filterUser:focus {

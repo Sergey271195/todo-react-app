@@ -3,16 +3,18 @@ import { DailyContext } from './context/DailyTasksContext'
 import DailyTask from './DailyItem'
 import DateHeader from './DateHeader'
 
-import {postFetch, fetchDataHandler, getCurrentDate} from './Utils'
+import {postFetch, fetchDataHandler, getCurrentDate, DARK, LIGHT, DARKBACKGROUND, LIGHTBACKGROUND} from './Utils'
 
 import '../styles/Daily.css'
 import { UserLoading } from './context/UserLoadingContext'
 import UsernameTitle from './UsernameTitle'
+import { ModeContext } from './context/ModeContext'
 
 
 
 const DailyTasksList = () => {
 
+    const {mode} = useContext(ModeContext)
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -60,7 +62,8 @@ const DailyTasksList = () => {
     return (
         <>
         <DateHeader fetchDailyTasks = {fetchDailyTasks}/>
-        <div className = 'dailyTasksDiv' style = {(loading || loadingUser) ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
+        <div className = {'dailyTasksDiv' + (mode ? ' dark': ' light')} 
+            style = {(loading || loadingUser) ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
             {(loading || loadingUser) ? <div className = 'loadingDiv'>Loading...</div>:
                 <>
                     {error ? <div className = 'loadingDiv' style = {{height: '100%'}}>{`< List not found />`}</div>:

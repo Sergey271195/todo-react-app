@@ -2,6 +2,8 @@ import React, {useContext} from 'react'
 
 import '../styles/Header.css'
 import { CurrentDate } from './context/DateContext'
+import { ModeContext } from './context/ModeContext'
+import { DARK, LIGHT, LIGHTBACKGROUND, DARKBACKGROUND } from './Utils'
 
 const Months = {
     1:  'Января',
@@ -37,12 +39,14 @@ const formatDate = (date) => {
 
 const DateHeader = ({fetchDailyTasks}) => {
 
+    const {mode} = useContext(ModeContext)
     const {currentDate, setCurrentDate} = useContext(CurrentDate)
 
     return (
-        <div className = 'headerDiv'>
+        <div className = 'headerDiv' style = {mode ? {...DARK, ...DARKBACKGROUND} : {...LIGHT, ...LIGHTBACKGROUND}}>
             <div className = 'dateWeek'>{formatDate(currentDate)}</div>
-            <input type = 'date' className = 'dateInput' onChange = {(event) => {setCurrentDate(event.target.value), fetchDailyTasks(event.target.value)}}/>
+            <input type = 'date' className = 'dateInput' 
+                onChange = {(event) => {setCurrentDate(event.target.value), fetchDailyTasks(event.target.value)}}/>
         </div>
     )
 }

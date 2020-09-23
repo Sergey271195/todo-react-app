@@ -31,3 +31,19 @@ export const getCurrentDate = () => {
     const today = `${date.getFullYear()}-${month < 10 ? ('0' + month): month}-${day < 10 ? ('0' + day): day}`
     return today
 }
+
+export const LIGHT = {
+    color: '#1F1F1F'
+  }
+  
+export const DARK = {
+    color: 'white'
+  }
+
+export const DARKBACKGROUND = {
+    backgroundColor: '#1A1A1A'
+}
+
+export const LIGHTBACKGROUND = {
+    backgroundColor: '#FFFFFF'
+}

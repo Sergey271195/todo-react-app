@@ -1,19 +1,18 @@
 .commentDiv {
     font-weight: 300;
     font-size: 14px;
-    color: #1F1F1F;
 }
 
 .commentForm {
     margin-bottom: 10px;
     font-size: 12px;
-    color: #1F1F1F;
 }
 
 .commentInputForm {
     outline: none;
     border: none;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
 }
 
 .commentInputForm:active {

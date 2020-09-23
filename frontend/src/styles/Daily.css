@@ -7,14 +7,20 @@
     overflow-y: scroll;
 }
 
+.light {
+    background-color: transparent;
+    color: #1F1F1F;
+}
+
+.dark {
+    background-color: #1F1F1F;
+    color: white;
+}
+
 a {
     text-decoration: none;
     outline-style: none;
-    color: black;
-}
-
-a:hover {
-    color: slateblue;
+    /* color: black; */
 }
 
 .mainDailyDiv {
@@ -133,7 +139,6 @@ a:hover {
     margin-bottom: 30px;
     font-size: 25px;
     font-weight: 600;
-    color: #1f1f1f;
 }
 
 .mainDailyItemDiv {

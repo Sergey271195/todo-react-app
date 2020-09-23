@@ -7,9 +7,12 @@ import '../styles/EmployeeList.css'
 import { MainEmployee } from "./context/MainEmployeeContext";
 import { UserLoading } from "./context/UserLoadingContext";
 import EmployeeListElement from "./EmployeeListElement";
+import { ModeContext } from "./context/ModeContext";
+import { DARK, DARKBACKGROUND, LIGHT, LIGHTBACKGROUND } from "./Utils";
 
 const EmployeeList = ({setToggleMain}) => {
 
+    const {mode} = useContext(ModeContext)
     const {dispatch} = useContext(EmployeeContext)
     const {employee, setEmployee} = useContext(MainEmployee)
     const {setLoadingUser} = useContext(UserLoading)
@@ -57,7 +60,7 @@ const EmployeeList = ({setToggleMain}) => {
 
 
     return (
-        <div className = 'employeeListDiv' >
+        <div className = 'employeeListDiv' style = {mode ? {...DARK, ...DARKBACKGROUND} : {...LIGHT, ...LIGHTBACKGROUND}}>
         
         {(!employee || employee.loading) ? <div className = 'loadingDiv'>Loading...</div> : 
             <>

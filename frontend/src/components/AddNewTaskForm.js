@@ -4,10 +4,12 @@ import { BiPlus } from "react-icons/bi"
 import '../styles/UsernameTitle.css'
 import { DailyContext } from './context/DailyTasksContext'
 import { EmployeeContext } from './context/EmployeeContext'
-import { fetchDataHandler, postFetch } from './Utils'
+import { ModeContext } from './context/ModeContext'
+import { LIGHT, DARK, fetchDataHandler, postFetch } from './Utils'
 
 const AddNewTaskForm = ({emplId}) => {
 
+    const { mode } = useContext(ModeContext)
     const { dispatch } = useContext(EmployeeContext)
     const { dispatchDaily } = useContext(DailyContext)
 
@@ -48,12 +50,12 @@ const AddNewTaskForm = ({emplId}) => {
         <div className = 'addTaskContainer'>
             <BiPlus className = 'plusIcon' onClick = {() => submitHandler()}/>
             <div className = 'addTaskInputContainer'>
-                <input className = 'addTaskInput' placeholder = 'Добавить задачу'
+                <input className = 'addTaskInput' placeholder = 'Добавить задачу' style = {mode ? DARK: LIGHT}
                     value = {formData.title}
                     onChange = {(event) => setFormData({...formData, title: event.target.value})}
                 />
                 {formData.title !== '' ?
-                    <input className = 'addTaskInput' placeholder = 'Добавить комментарий' 
+                    <input className = 'addTaskInput' placeholder = 'Добавить комментарий' style = {mode ? DARK: LIGHT}
                         value = {formData.comment}
                         onChange = {(event) => setFormData({...formData, comment: event.target.value})}
                     />

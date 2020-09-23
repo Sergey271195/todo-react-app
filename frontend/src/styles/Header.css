@@ -10,7 +10,6 @@
 .dateWeek {
     font-weight: 600;
     font-size: 22px;
-    color: #1F1F1F;
 }
 
 .dateIcon {
@@ -24,6 +23,7 @@
 .dateInput {
     border: none;
     outline: none;
+    background-color: transparent;
 }
 
 
