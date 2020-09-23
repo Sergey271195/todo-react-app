@@ -30,12 +30,11 @@ class EmployeeManager():
                 print(employee)
                 employee.save()
             else:
-                pass
-                """ if photo:
+                if photo:
                     db_user.update(photo = photo)
                 else:
                     db_user.update(photo = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg")
-                print(db_user.values()) """
+                print(db_user.values())
 
     def delete_employee(self, id_):
         try:
