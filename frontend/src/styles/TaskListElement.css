@@ -1,0 +1,23 @@
+.tasksDiv {
+    font-size: 18px;
+    padding: 10px 0px 0px 10px;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    width: 80%;
+    margin-bottom: 10px;
+    
+}
+
+.taskDivWrapper {
+    width: 80%;
+    border-bottom: 1px solid #6C6C6C;
+    padding-bottom: 10px;
+}
+
+.tasksDiv:hover {
+    border-left: 2px solid  #FDD835;
+}
+
+.included {
+    border-left: 2px solid  #FDD835;
+}

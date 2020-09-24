@@ -48,15 +48,6 @@ a {
     width: 80%;
 }
 
-.taskStateDiv {
-    cursor: pointer;
-    border-right: 20px solid slateblue;
-}
-.taskStateDiv.completed {
-    border-right: 20px solid lightgreen;
-}
-
-
 .dailyDiv.completed{
     text-decoration: line-through;
 }
@@ -73,37 +64,6 @@ a {
     list-style-type: none;
 }
 
-.commentInput {
-    margin-top: 10px;
-    border: none;
-    border-bottom: 2px solid white;
-    font-style:italic;
-}
-
-
-.commentInput:active {
-    outline: none;
-    border-bottom: 2px solid slateblue;
-}
-
-.commentInput:focus {
-    outline: none;
-    border-bottom: 2px solid slateblue;
-}
-
-.moveBtn {
-    outline: none;
-    border: none;
-    border-right: 2px solid slateblue;
-    background-color: white;
-    margin-bottom: 20px;
-    cursor: pointer;
-    padding: 8px;
-    font-size: 15px;
-}
-.moveBtn:active {
-    border-right: 2px solid black;
-}
 
 .loadingDiv {
     display: flex;

@@ -25,7 +25,7 @@ const DailyTasksList = () => {
             {Object.keys(dailyTasks.tasks).map((employee) => {
                 return (
                 <div key = {employee} className = 'mainDailyDiv'>
-                    <UsernameTitle employee = {employee} emplId = {dailyTasks.tasks[employee][0].emplId}/>
+                    <UsernameTitle employee = {employee} emplId = {dailyTasks.tasks[employee][0].emplId} mainList = {true}/>
                     {dailyTasks.tasks[employee].map((task, index) => {
                         return (
                             <DailyTask key = {task.taskId} {...task} index = {index} employee = {employee} />

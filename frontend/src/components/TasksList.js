@@ -1,20 +1,16 @@
 import React, {useContext, useState, useEffect} from 'react';
-import { DailyContext } from './context/DailyTasksContext';
 import { EmployeeContext } from './context/EmployeeContext';
 
-import '../styles/Tasks.css'
-import {fetchDataHandler, postFetch, saveToLocalStorage} from './Utils'
-import { UserLoading } from './context/UserLoadingContext';
+import '../styles/TasksList.css'
+import { saveToLocalStorage } from './Utils'
+import TaskListElement from './TaskListElement';
+import UsernameTitle from './UsernameTitle'
+import { ModeContext } from './context/ModeContext';
 
 const TasksList = () => {
 
-    const {currEmployee, dispatch} = useContext(EmployeeContext)
-    const {dailyTasks, dispatchDaily} = useContext(DailyContext)
-    const [formData, setFormData] = useState({
-        title: '',
-        comment: ''
-    })
-    const [validationError, setValidationError] = useState(false)
+    const { currEmployee } = useContext(EmployeeContext)
+    const { mode } = useContext(ModeContext)
 
     useEffect(() => {
         if (currEmployee && currEmployee.emplId) {
@@ -22,81 +18,14 @@ const TasksList = () => {
         }        
     }, [currEmployee])
 
-    const submitHandler = (event) => {
-
-        event.preventDefault()
-        if (formData.title == '') {
-            setValidationError(true)
-        }
-
-        else {
-            const data = {
-                action: 'Create',
-                title: formData.title,
-                comment: formData.comment,
-                responsibleId: currEmployee.emplId
-            }
-            postFetch({url: `api/tasks/create${currEmployee.emplId}`, data: data})
-                .then(data => {
-                    if (data.status !== 404) {
-                        const task = fetchDataHandler(data)
-                        dispatchDaily({type: 'EXTEND_DAILY', task: task})
-                        dispatch({type: 'EXTEND_TASKS', task: task})
-                    }
-                })
-            setFormData({
-                title: '',
-                comment: ''
-            })
-        }
-    }
-
-    const removeTask = ({taskId, emplId, fullName}) => {
-        postFetch({url: `api/tasks/user${emplId}`, data: {action: 'Remove', taskId}})
-            .then(data => 
-                {
-                if (data.status === 200) {
-                    dispatchDaily({type: 'REMOVE_FROM_DAILY', fullName, taskId})
-                }
-            })
-        }
-
-    const addExistingTask = ({taskId, emplId}) => {
-        postFetch({url: `api/tasks/user${emplId}`, data: {action: 'Add', taskId}})
-            .then(data => {
-                if (data.status !== 404) {
-                    const task = fetchDataHandler(data)
-                    dispatchDaily({type: 'EXTEND_DAILY', task: task})
-                }
-        })
-    }
-
     if (currEmployee) {
         return (
-            <div className = 'usersTasksDiv'>
-                <h2>{currEmployee.fullName}</h2>
-
-                <form className = 'formTag' method = 'POST' 
-                    onSubmit = {(event) => submitHandler(event)}>
-                        <textarea name = 'title' className = 'newTaskInput' placeholder = 'Новое задание...' 
-                            value = {formData.title}
-                            onChange = {(event) => {setFormData({...formData, title: event.target.value}), setValidationError(false)}}>
-                        </textarea>
-                        <textarea name = 'comment' className = 'newTaskInput' placeholder = 'Комментарий...'
-                            value = {formData.comment}
-                            onChange = {(event) => setFormData({...formData, comment: event.target.value})}>
-                        </textarea>
-                    <button className = 'addBtn'>+</button>
-                </form>
-
+            <div className = {'usersTasksDiv' + (mode ? ' dark': ' light')}>
+                <div className = 'currUserTitleDiv'>
+                    <UsernameTitle employee = {currEmployee.fullName} emplId = {currEmployee.emplId} mainList = {false}/>
+                </div>
                 {currEmployee.tasks.map(({taskId, title}) => {
-                    const emplId = currEmployee.emplId
-                    const included = dailyTasks.tasksId.includes(parseInt(taskId)) ? true : false
-                    return <div key = {taskId} className = {included ? 'tasksDivActive': 'tasksDiv'}
-                                onClick = {included ? () => removeTask({taskId, emplId, fullName: currEmployee.fullName}) : () => addExistingTask({taskId, emplId})}
-                            >
-                                {title}
-                            </div>
+                    return <TaskListElement key = {taskId} taskId = {taskId} title = {title} emplId = {currEmployee.emplId} fullName = {currEmployee.fullName}/>
                 })}
             </div>
         )

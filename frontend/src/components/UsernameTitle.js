@@ -3,14 +3,14 @@ import React from 'react'
 import '../styles/UsernameTitle.css'
 import AddNewTaskForm from './AddNewTaskForm'
 
-const UsernameTitle = ({employee, emplId}) => {
+const UsernameTitle = ({employee, emplId, mainList}) => {
     
     return (
         <>
             <div className = 'usernameTitleDiv'>
                 {employee}
             </div>
-            <AddNewTaskForm emplId = {emplId}/>
+            <AddNewTaskForm emplId = {emplId} mainList = {mainList}/>
         </>
     )
 }

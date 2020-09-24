@@ -7,7 +7,7 @@ import { EmployeeContext } from './context/EmployeeContext'
 import { ModeContext } from './context/ModeContext'
 import { LIGHT, DARK, fetchDataHandler, postFetch } from './Utils'
 
-const AddNewTaskForm = ({emplId}) => {
+const AddNewTaskForm = ({emplId, mainList}) => {
 
     const { mode } = useContext(ModeContext)
     const { dispatch } = useContext(EmployeeContext)
@@ -31,7 +31,9 @@ const AddNewTaskForm = ({emplId}) => {
                     if (data.status !== 404) {
                         const task = fetchDataHandler(data)
                         dispatchDaily({type: 'EXTEND_DAILY', task: task})
-                        /* dispatch({type: 'EXTEND_TASKS', task: task}) */
+                        if (!mainList) {
+                            dispatch({type: 'EXTEND_TASKS', task: task})
+                        }
                     }
                 })
             setFormData({
