@@ -6,3 +6,13 @@
     justify-content: center;
     font-size: 25px;
 }
+
+.light {
+    background-color: transparent;
+    color: #1F1F1F;
+}
+
+.dark {
+    background-color: #1F1F1F;
+    color: white;
+}
