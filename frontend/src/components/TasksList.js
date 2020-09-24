@@ -10,7 +10,6 @@ const TasksList = () => {
 
     const {currEmployee, dispatch} = useContext(EmployeeContext)
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
-    const {loadingUser} = useContext(UserLoading)
     const [formData, setFormData] = useState({
         title: '',
         comment: ''
@@ -74,9 +73,7 @@ const TasksList = () => {
 
     if (currEmployee) {
         return (
-            <div className = 'usersTasksDiv' style = {loadingUser ? {justifyContent: 'center'} : {justifyContent: 'start'}}>
-            {loadingUser ? <div className = 'loadingDiv'>Loading...</div>: 
-                <>
+            <div className = 'usersTasksDiv'>
                 <h2>{currEmployee.fullName}</h2>
 
                 <form className = 'formTag' method = 'POST' 
@@ -101,8 +98,6 @@ const TasksList = () => {
                                 {title}
                             </div>
                 })}
-            </>
-            }
             </div>
         )
     }
