@@ -69,14 +69,14 @@ const Contorller = () => {
                         <DateHeader fetchDailyTasks = {fetchDailyTasks}/>
                         { loadingUser ? <LoadingScreen /> :
                             <>{ greeting ? <GoodMorningGreeting /> :
-                                <>{ error ? <NotFoundScreen /> :
                                     <>{toggleMain ? 
-                                        <DailyTasksList /> 
+                                        <>{ error ? <NotFoundScreen /> :
+                                            <DailyTasksList /> 
+                                        }</>
                                         : <TasksList />
                                     }</>
                                 }</>
-                            }</>
-                        }   
+                            }
                     </div>
             </div>
         </>
