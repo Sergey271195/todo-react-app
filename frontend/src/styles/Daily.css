@@ -108,9 +108,16 @@ a {
 .dailyItemContentDiv {
     display: flex;
     flex-direction: column;
-    width: 80%
+    width: 60%
 }
 
+.timeDiv {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    align-items: start;
+    padding: 5px;
+}
 
 .dailyWrapperDiv {
     display: flex;
@@ -118,4 +125,9 @@ a {
     padding-bottom: 10px;
     border-bottom: 1px solid #6C6C6C;
     margin-bottom: 20px;
+}
+
+
+.timeDiv.only {
+    padding: 0;
 }

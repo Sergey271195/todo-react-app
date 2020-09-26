@@ -84,6 +84,12 @@ class BitrixIntegrator():
         req = requests.get(method_url)
         return req.json()
 
+    def save_time_to_bitrix(self, userId, taskId, starting_time, total_time):
+        created_date = starting_time.strftime("%Y-%m-%d %H:%M:%S")
+        request_url = f'{self.main_url}/task.elapseditem.add?taskId={taskId}&ARFIELDS[USER_ID]={userId}&ARFIELDS[CREATED_DATE]={created_date}&ARFIELDS[SECONDS]={int(total_time)}&ARFIELDS[COMMENT_TEXT]='
+        request = requests.get(request_url)
+        response = request.json()
+
 
 if __name__ == "__main__":
     bitrix = BitrixIntegrator()

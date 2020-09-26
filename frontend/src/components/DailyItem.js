@@ -5,11 +5,13 @@ import { CurrentDate } from './context/DateContext'
 import DownButton from './DownButton'
 import TaskCheckbox from './TaskCheckbox'
 import TaskTitle from './TaskTitle'
+import TimeTracker from './TimeTracker'
 import UpButton from './UpButton'
 
 import { getCurrentDate } from './Utils'
 
-const DailyTask = ({title, comments, completed, pk, index, employee, emplId, taskId}) => {
+const DailyTask = ({title, comments, completed, pk, index, employee,
+                emplId, taskId, time }) => {
 
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
     const { currentDate } = useContext(CurrentDate)
@@ -35,10 +37,13 @@ const DailyTask = ({title, comments, completed, pk, index, employee, emplId, tas
                 <div className = 'dailyItemContentDiv'>
 
                     <TaskTitle url = {`https://illuminator3000.bitrix24.ru/company/personal/user/${emplId}/tasks/task/view/${taskId}/`} 
-                        title = {title} completed = {completed}/>
-
+                        title = {title} completed = {completed} />
+                    
                     <CommentComponent comments = {comments} rightDate = {rightDate} pk ={pk} index = {index} employee = {employee} />
 
+                </div>
+                <div className ={'timeDiv' + (rightDate ? '': ' only')}>
+                    <TimeTracker emplId = {emplId} taskId = {taskId} time = {time} rightDate = {rightDate}/>
                 </div>
                 {
                     index !=  0 ? 

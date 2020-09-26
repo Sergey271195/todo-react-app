@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.utils import timezone
 from .models import Employee, Task, DailyTaskConnector, DailyTaskList
 from task_creator.bitrix24 import BitrixIntegrator
 
@@ -84,6 +85,15 @@ class TaskManager():
         except DailyTaskList.DoesNotExist:
             todolist = DailyTaskList(date = datetime.date.today())
             todolist.save()
+            yesterday = (timezone.localtime(timezone.now()) - datetime.timedelta(days = 1)).date()
+            yesterday_tasks = self.get_daily_tasks(yesterday)
+            for task in yesterday_tasks:
+                if task.active:
+                    task.active = False
+                    delta_time = (datetime.datetime.combine(timezone.localtime(timezone.now()).date(), datetime.time(0)) 
+                        - timezone.localtime(task.starting_time)).total_seconds()
+                    task.total_time += delta_time
+                    task.save()
             return todolist
 
     def get_todolist_by_date(self, date):
@@ -94,7 +104,6 @@ class TaskManager():
             return None
 
     def get_daily_tasks(self, date):
-        #todolist = self.get_todolist()
         todolist = self.get_todolist_by_date(date)
         if todolist:
             daily_tasks = DailyTaskConnector.objects.filter(task_list = todolist).order_by('employee_id').order_by('priority')

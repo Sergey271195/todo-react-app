@@ -36,6 +36,18 @@ export const DailyTasksReducer = (state, action) => {
             state.tasks[action.employee][action.index] = temp
             return {...state}
         }
+        case 'SWITCH_ACTIVE': {
+            const updated_tasks = Object.keys(state.tasks).reduce((obj, task) => {
+                obj[task] = state.tasks[task].map((taskObj) => {
+                    const upTask = (taskObj.taskId === action.taskId) ? {...taskObj, time: {...taskObj.time, active: !action.active}}
+                    : taskObj
+                    return upTask
+
+                })
+                return obj
+            }, {})
+            return {tasksId: state.taskId, tasks: updated_tasks}
+        }
         default:
             return state
     }

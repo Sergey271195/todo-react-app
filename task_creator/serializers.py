@@ -58,12 +58,25 @@ class DailyTaskConnectorSerializer(serializers.Serializer):
     priority = serializers.IntegerField()
     comments = serializers.SerializerMethodField()
     completed = serializers.BooleanField()
+    active = serializers.BooleanField()
+    starting_time = serializers.DateTimeField()
+    ending_time = serializers.DateTimeField()
+    total_time = serializers.IntegerField()
 
     def get_comments(self, obj):
         comments = Comment.objects.filter(task_connector = obj)
         serializer = CommentSerialzier(comments, many = True)
         return serializer.data
 
+
+class TimeTrackerSerializer(serializers.Serializer):
+    
+    pk = serializers.IntegerField(read_only = True)
+    completed = serializers.BooleanField()
+    active = serializers.BooleanField()
+    starting_time = serializers.DateTimeField()
+    ending_time = serializers.DateTimeField()
+    total_time = serializers.IntegerField()
 
 class CommentSerialzier(serializers.Serializer):
 

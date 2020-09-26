@@ -18,7 +18,6 @@ from task_creator.bitrix24 import BitrixIntegrator
 
 def get_last_task_index(employee_id):
     today = timezone.now().date()
-    print( DailyTaskConnector.objects.filter(task_list__date = today))
     last_index = DailyTaskConnector.objects.filter(employee_id__bitrix_id = employee_id, task_list__date = today).aggregate(Max('priority'))
     return last_index['priority__max'] if last_index['priority__max'] else 0
 
@@ -73,7 +72,6 @@ def removeTaskFromDailyList(task_id, todolist):
 
 
 def addTaskToDailyList(task, todolist, employee_id, priority, comment = None):
-    print(priority)
     try:
         connector = DailyTaskConnector.objects.get(task = task, task_list = todolist)
     except DailyTaskConnector.DoesNotExist:

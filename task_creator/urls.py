@@ -1,7 +1,8 @@
 from django.urls import path, include
-from .views import userManagerView, addTaskView, dailyTaskManagerView, commentManagerView, completeTaskView, createTaskView, shiftTasksView
-from .utilities import EmployeeManager
-from task_creator.bitrix24 import BitrixIntegrator
+from .views import (userManagerView, addTaskView, dailyTaskManagerView,
+                    commentManagerView, completeTaskView,
+                    createTaskView, shiftTasksView)
+from .time_tracker import startView, endView
 
 
 urlpatterns = [
@@ -11,5 +12,7 @@ urlpatterns = [
     path('tasks/comment<int:pk>', commentManagerView),
     path('tasks/complete<int:pk>', completeTaskView),
     path('tasks/create<int:emplId>', createTaskView),
-    path('tasks/shift', shiftTasksView)
+    path('tasks/shift', shiftTasksView),
+    path('time/start&user<int:user_id>&task<int:task_id>', startView),
+    path('time/end&user<int:user_id>&task<int:task_id>', endView)
 ]

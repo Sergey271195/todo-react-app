@@ -97,8 +97,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-""" STATICFILES_DIRS = [
-    "/frontend/static",
-] """
 
 django_heroku.settings(locals())

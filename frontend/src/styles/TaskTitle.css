@@ -12,15 +12,14 @@
 
 .taskLink {
     outline-style: none;
-    width: 80%;
+    width: 100%;
 }
 
 .taskLink:hover {
     color: #FDD835 !important;
 }
 
-.timeDiv {
-    width: 20%;
-    margin-left: 20px;
-    font-size: 15px;
+.timeBtn {
+    font-size: 25px;
+    margin-bottom: 5px;
 }
