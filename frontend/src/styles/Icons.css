@@ -1,5 +1,6 @@
 .homeIcon {
     cursor: pointer;
+    font-size: 20px;
 }
 
 .homeIcon:hover {
@@ -37,4 +38,10 @@
 
 .searchIcon {
     margin-right: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+    .HeaderDiv {
+        margin-left: 10px;
+    }
 }

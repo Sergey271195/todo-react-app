@@ -5,7 +5,7 @@ import { DailyContext } from './context/DailyTasksContext'
 const handleTime = (time) => {
     return {
         hours: Math.floor(time/3600),
-        minutes: Math.floor(time/60),
+        minutes: Math.floor(time/60) - Math.floor(time/3600)*60,
         seconds: time%60,
         total: time
     }
