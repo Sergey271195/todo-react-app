@@ -31,7 +31,8 @@ class DailyTaskConnector(models.Model):
     active = models.BooleanField(default=False)
     starting_time = models.DateTimeField(blank = True, null = True)
     ending_time = models.DateTimeField(blank = True, null = True)
-    total_time = models.IntegerField(default = 0)
+    #total_time = models.IntegerField(default = 0)
+    total_time_two = models.IntegerField(default = 0) 
 
 class Comment(models.Model):
     task_connector = models.ForeignKey(DailyTaskConnector, on_delete=models.CASCADE)
