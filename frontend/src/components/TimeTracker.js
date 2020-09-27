@@ -36,7 +36,7 @@ const TimeTracker = ({emplId, taskId, time, rightDate}) => {
         if (active) {
             tracker = setInterval(() => {setTracking({
                 hours: Math.floor((tracking.total+1)/3600),
-                minutes: Math.floor((tracking.total+1)/60),
+                minutes: Math.floor((tracking.total+1)/60) - Math.floor((tracking.total+1)/3600)*60,
                 seconds: (tracking.total+1)%60,
                 total: tracking.total+1
             })}, 1000)
