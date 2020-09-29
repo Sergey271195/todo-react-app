@@ -143,4 +143,13 @@ a {
         margin-bottom: 10px;
         justify-content: space-between;
     }
+    .timeDiv {
+        flex-direction: row;
+        width: 50%;
+        align-items: center;
+    }
+    .timeNum {
+        margin-left: 10px;
+        margin-bottom: 4px;
+    }
 }
