@@ -15,16 +15,9 @@ import { FilterUsers } from './context/FilterUsers';
 
 const MobileMenuButtons = ({setToggleMain}) => {
 
-    const returnToMain = () => {
-        localStorage.removeItem('employee')
-        setToggleMain(true)
-      }
     const { setMobileMode } = useContext(MobileContext);
     const {filterUsers, setFilterUsers} = useContext(FilterUsers);
     const [search, setSearch] = useState(false)
-    /* let path = document.getElementById('app');
-    let attr = path.getAttribute('static-path'); */
-
 
     return (
         <div className = 'menuBar'>
