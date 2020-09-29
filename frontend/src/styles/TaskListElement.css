@@ -21,3 +21,9 @@
 .included {
     border-left: 2px solid  #FDD835;
 }
+
+@media screen and (max-width: 600px) {
+    .taskDivWrapper {
+        width: 90%
+    }
+}

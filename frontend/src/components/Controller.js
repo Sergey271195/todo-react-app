@@ -12,7 +12,9 @@ import DateHeader from './DateHeader';
 import LoadingScreen from './Loading';
 import NotFoundScreen from './NotFoundScreen';
 import GoodMorningGreeting from './GoodMorning';
+import MobileMenuButtons from './MobileMenuButtons';
 import { UserLoading } from './context/UserLoadingContext';
+import { MobileContext } from './context/MobileContext';
 
 const Contorller = () => {
 
@@ -20,7 +22,10 @@ const Contorller = () => {
     const {loadingUser, setLoadingUser} = useContext(UserLoading)
     const [error, setError] = useState(false)
     const { dispatchDaily } = useContext(DailyContext)
-    const [ greeting, setGreeting ] = useState(false) 
+    const [ greeting, setGreeting ] = useState(false)
+    
+    /* Mobile version */
+    const { mobileMode, setMobileMode } = useContext(MobileContext);
 
     const prepareDailyList = (tasks) => {
         const dailyList = tasks.reduce((obj, taskObj) => {
@@ -61,12 +66,30 @@ const Contorller = () => {
         fetchDailyTasks(getCurrentDate())
     }, [])
 
+    useEffect(() => {
+        const handleWindowResize = () => {
+            window.innerWidth < 600 ? setMobileMode({
+                mode: true,
+                menu: false
+            }) : setMobileMode({
+                    mode: false,
+                    menu: false
+                }) 
+        }
+        window.addEventListener('resize', handleWindowResize);
+        handleWindowResize()
+        return () => window.removeEventListener("resize", handleWindowResize)
+    }, [])
+
     return (
         <>
             <div className = 'mainDiv'>
-                <EmployeeList setToggleMain = {setToggleMain}/>
+                {mobileMode.mode ? <></>
+                : <EmployeeList setToggleMain = {setToggleMain}/>
+                }
                     <div className = 'contentDiv'>
                         <DateHeader fetchDailyTasks = {fetchDailyTasks}/>
+                        {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
                         { loadingUser ? <LoadingScreen /> :
                             <>{ greeting ? <GoodMorningGreeting /> :
                                     <>{toggleMain ? 
@@ -76,6 +99,10 @@ const Contorller = () => {
                                         : <TasksList />
                                     }</>
                                 }</>
+                            }
+                        </>}
+                            { mobileMode.mode ? <MobileMenuButtons />
+                                : <></> 
                             }
                     </div>
             </div>

@@ -78,6 +78,9 @@ class TaskManager():
         employee_tasks = self.bitrix.get_all_user_tasks(id_)
         return employee_tasks
 
+
+    ###Changes here
+
     def get_todolist(self):
         try:
             todolist = DailyTaskList.objects.get(date = datetime.date.today())
@@ -85,14 +88,19 @@ class TaskManager():
         except DailyTaskList.DoesNotExist:
             todolist = DailyTaskList(date = datetime.date.today())
             todolist.save()
+            print('Creating new date object')
             yesterday = (timezone.localtime(timezone.now()) - datetime.timedelta(days = 1)).date()
+            print('Cleaning yesterday')
             yesterday_tasks = self.get_daily_tasks(yesterday)
+            print(yesterday_tasks)
             for task in yesterday_tasks:
+                print(task, task.active, 'for task in tasks', task.starting_time)
                 if task.active:
                     task.active = False
                     delta_time = (datetime.datetime.combine(timezone.localtime(timezone.now()).date(), datetime.time(0)) 
                         - timezone.localtime(task.starting_time)).total_seconds()
                     task.total_time += delta_time
+                    print(delta_time)
                     task.save()
             return todolist
 
@@ -101,6 +109,7 @@ class TaskManager():
             todolist = DailyTaskList.objects.get(date = date)
             return todolist
         except DailyTaskList.DoesNotExist:
+            self.get_todolist()
             return None
 
     def get_daily_tasks(self, date):

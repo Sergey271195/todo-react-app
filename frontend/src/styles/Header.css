@@ -44,3 +44,18 @@
     outline: none;
     border:none;
 }
+
+@media screen and (max-width: 600px) {
+    .headerDiv {
+        padding: 20px;
+        justify-content: center;
+    }
+    .dateWeek {
+        font-size: 18px;
+    }
+    ::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        font-size: 20px;
+        padding: 10px;
+    }
+}

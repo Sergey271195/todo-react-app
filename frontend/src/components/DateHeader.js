@@ -2,6 +2,7 @@ import React, {useContext} from 'react'
 
 import '../styles/Header.css'
 import { CurrentDate } from './context/DateContext'
+import { MobileContext } from './context/MobileContext'
 import { ModeContext } from './context/ModeContext'
 import { DARK, LIGHT, LIGHTBACKGROUND, DARKBACKGROUND } from './Utils'
 

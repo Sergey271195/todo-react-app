@@ -46,3 +46,12 @@
     flex-direction: column;
     margin-left: 20px;
 }
+
+@media screen and (max-width: 600px) {
+    .plusIcon {
+        font-size: 20px;
+    }
+    .addTaskInput {
+        line-height: 30px;
+    }
+}

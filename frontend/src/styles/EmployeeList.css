@@ -47,6 +47,13 @@ html, body {
 
 @media screen and (max-width: 1000px) {
     .employeeDiv {
-        margin-left: 10px;
+        margin-left: 15px;
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .employeeListDiv {
+        width: 100%;
     }
 }

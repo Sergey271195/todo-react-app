@@ -7,7 +7,10 @@ import MainEmployeeProvider from "./context/MainEmployeeContext";
 import UserLoadingProvider from "./context/UserLoadingContext";
 import CurrentDateProvider from "./context/DateContext";
 import ModeContextProvider from "./context/ModeContext";
+import MobileContextProvider from "./context/MobileContext";
+
 import Contorller from "./Controller";
+
 
 const App = () => {
 
@@ -18,7 +21,9 @@ const App = () => {
             <UserLoadingProvider>
               <CurrentDateProvider>
                 <ModeContextProvider>
-                  <Contorller />
+                  <MobileContextProvider>
+                    <Contorller />
+                  </MobileContextProvider>
                 </ModeContextProvider>
               </CurrentDateProvider>
             </UserLoadingProvider>

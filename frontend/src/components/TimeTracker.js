@@ -34,12 +34,9 @@ const TimeTracker = ({emplId, taskId, time, rightDate}) => {
     useEffect(() => {
         let tracker
         if (active) {
-            tracker = setInterval(() => {setTracking({
-                hours: Math.floor((tracking.total+1)/3600),
-                minutes: Math.floor((tracking.total+1)/60) - Math.floor((tracking.total+1)/3600)*60,
-                seconds: (tracking.total+1)%60,
-                total: tracking.total+1
-            })}, 1000)
+            tracker = setInterval(() => {setTracking
+                (handleTime(tracking.total+1))
+            }, 1000)
 
         }
         return () => {
