@@ -1,7 +1,6 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 /* Icons */
-import {FiMenu} from 'react-icons/fi';
 import { BiUser } from 'react-icons/bi';
 import { BsCheckCircle, BsSearch } from 'react-icons/bs';
 import { VscHome, VscChromeClose } from "react-icons/vsc";
@@ -15,9 +14,14 @@ import { FilterUsers } from './context/FilterUsers';
 
 const MobileMenuButtons = ({setToggleMain}) => {
 
+
     const { setMobileMode } = useContext(MobileContext);
     const {filterUsers, setFilterUsers} = useContext(FilterUsers);
     const [search, setSearch] = useState(false)
+
+    useEffect(() => {
+        setToggleMain(true)
+    }, [])
 
     return (
         <div className = 'menuBar'>
@@ -38,6 +42,16 @@ const MobileMenuButtons = ({setToggleMain}) => {
                 }}/>
             </>:
             <>
+                <div className = 'mobileMenuDiv' onClick = {() => {
+                        setMobileMode({
+                            mode: true,
+                            menu: false
+                        })
+                        setToggleMain(true)
+                    }}>
+                        <VscHome className = 'mobileMenuIcon' />
+                        <label className = 'mobileMenuLabel'>Главная</label>
+                </div>
                 <div className = 'mobileMenuDiv' onClick = {() => setMobileMode({
                         mode: true,
                         menu: true
@@ -68,16 +82,7 @@ const MobileMenuButtons = ({setToggleMain}) => {
                     <label className = 'mobileMenuLabel'>Поиск</label> 
                 </div>
                 
-                <div className = 'mobileMenuDiv' onClick = {() => {
-                    setMobileMode({
-                        mode: true,
-                        menu: false
-                    })
-                    setToggleMain(true)
-                }}>
-                    <VscHome className = 'mobileMenuIcon' />
-                    <label className = 'mobileMenuLabel'>Главная</label>
-                </div>
+                
             </>}
             
         </div>
@@ -88,10 +93,3 @@ const MobileMenuButtons = ({setToggleMain}) => {
 
 
 export default MobileMenuButtons
-
-{/* <FiMenu style = {{fontSize: '30px', cursor: 'pointer', position: 'absolute', bottom: '20px',
-            right: '30px', padding: '8px', borderRadius: '50%', backgroundColor: '#FDD835', zIndex: '2'}}
-                onClick = {() => {
-                    setMobileMode({...mobileMode, menu: !mobileMode.menu})
-                }}
-        /> */}
