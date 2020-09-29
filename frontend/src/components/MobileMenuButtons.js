@@ -31,7 +31,14 @@ const MobileMenuButtons = ({setToggleMain}) => {
             {search ? 
             <>
                 <input placeholder = 'Сотрудник' className = 'mobileFilterInput' value = {filterUsers} 
-                    onChange = {(event) => setFilterUsers(event.target.value)} />
+                    onChange = {(event) => {
+                        event.preventDefault()
+                        setFilterUsers(event.target.value)
+                        setMobileMode({
+                            mode: true,
+                            menu: true
+                        })
+                        }} />
                 <VscChromeClose className = 'mobileMenuIcon' onClick = {() => {
                     setSearch(false),
                     setFilterUsers('')
