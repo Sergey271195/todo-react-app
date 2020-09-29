@@ -27,13 +27,13 @@
 }
 
 
-::-webkit-datetime-edit { display: none }
+/* ::-webkit-datetime-edit { display: none }
 ::-webkit-datetime-edit-fields-wrapper {  display: none }
 ::-webkit-datetime-edit-text { display: none }
 ::-webkit-datetime-edit-month-field {  display: none }
 ::-webkit-datetime-edit-day-field {  display: none }
 ::-webkit-datetime-edit-year-field { display: none }
-::-webkit-inner-spin-button { display: none; }
+::-webkit-inner-spin-button { display: none; } */
 
 
 @media screen and (max-width: 600px) {
