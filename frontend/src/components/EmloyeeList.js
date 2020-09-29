@@ -16,7 +16,6 @@ const EmployeeList = ({setToggleMain}) => {
     const {dispatch} = useContext(EmployeeContext)
     const {employee, setEmployee} = useContext(MainEmployee)
     const {setLoadingUser} = useContext(UserLoading)
-    const [filterUsers, setFilterUsers] = useState('')
 
     const returnToMain = () => {
         localStorage.removeItem('employee')
@@ -64,11 +63,11 @@ const EmployeeList = ({setToggleMain}) => {
         
         {(!employee || employee.loading) ? <div className = 'loadingDiv'>Loading...</div> : 
             <>
-                <EmployeeHeader returnToMain = {returnToMain} setFilterUsers = {setFilterUsers} filterUsers = {filterUsers}/>
+                <EmployeeHeader returnToMain = {returnToMain} />
 
                 {employee.users.map(({bitrix_id: emplId, full_name: fullName, photo}) => {
                     return <EmployeeListElement key = {emplId} emplId = {emplId} fullName = {fullName} photo = {photo}
-                        getUsersTasks = {getUsersTasks} filterUsers = {filterUsers}/>
+                        getUsersTasks = {getUsersTasks} />
                 })}
 
             </>

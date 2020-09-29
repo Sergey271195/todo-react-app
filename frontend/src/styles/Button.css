@@ -7,3 +7,10 @@
     align-self: center;
     color: #1F1F1F;
 }
+
+@media screen and (max-width: 600px) {
+    .btnIcon {
+        font-size: 25px;
+        margin-right: 10px;
+    }
+}

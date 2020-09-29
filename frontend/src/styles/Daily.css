@@ -131,3 +131,16 @@ a {
 .timeDiv.only {
     padding: 0;
 }
+
+@media screen and (max-width: 600px) {
+    .dailyItemContentDiv {
+        width: 90%;
+    }
+    .mobileVersionDiv {
+        width: 100%;
+        display: flex;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        justify-content: space-between;
+    }
+}

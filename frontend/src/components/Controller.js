@@ -15,6 +15,7 @@ import GoodMorningGreeting from './GoodMorning';
 import MobileMenuButtons from './MobileMenuButtons';
 import { UserLoading } from './context/UserLoadingContext';
 import { MobileContext } from './context/MobileContext';
+import FilterUsersProvider from './context/FilterUsers';
 
 const Contorller = () => {
 
@@ -82,7 +83,7 @@ const Contorller = () => {
     }, [])
 
     return (
-        <>
+        <FilterUsersProvider>
             <div className = 'mainDiv'>
                 {mobileMode.mode ? <></>
                 : <EmployeeList setToggleMain = {setToggleMain}/>
@@ -101,12 +102,12 @@ const Contorller = () => {
                                 }</>
                             }
                         </>}
-                            { mobileMode.mode ? <MobileMenuButtons />
+                            { mobileMode.mode ? <MobileMenuButtons setToggleMain = {setToggleMain}/>
                                 : <></> 
                             }
                     </div>
             </div>
-        </>
+        </FilterUsersProvider>
     )
 
 }

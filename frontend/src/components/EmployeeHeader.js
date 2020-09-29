@@ -6,27 +6,17 @@ import '../styles/Icons.css'
 import { ModeContext } from './context/ModeContext';
 import { DARK, LIGHT, DARKBACKGROUND, LIGHTBACKGROUND } from './Utils';
 import { MobileContext } from './context/MobileContext';
+import { FilterUsers } from './context/FilterUsers';
 
-const EmployeeHeader = ({returnToMain, filterUsers, setFilterUsers}) => {
+const EmployeeHeader = ({returnToMain}) => {
 
     const { mode, setMode } = useContext(ModeContext)
     const { mobileMode, setMobileMode } = useContext(MobileContext)
-    
+    const {filterUsers, setFilterUsers} = useContext(FilterUsers)
 
     return (
         <div className = 'HeaderDiv'>
-            {mobileMode.mode ? 
-            <div className = 'toMainMobile' onClick = {() => {
-                returnToMain()
-                setMobileMode({
-                    ...mobileMode,
-                    menu: false
-                })
-            }}>
-                <VscHome style = {{ fontSize: '30px', marginRight: '30px' }}/>
-                <div style = {{ fontSize: '18px'}}>Главная</div>
-            </div>
-            :
+            {mobileMode.mode ? <></> :
             <>
                 {mode ? <FiMoon size = '20px' onClick = {() => setMode(!mode)} className = 'modeIcon'/>
                 : <FiSun size = '20px' onClick = {() => setMode(!mode)} className = 'modeIcon'/>

@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
+import { FilterUsers } from './context/FilterUsers';
 import { MobileContext } from './context/MobileContext';
 
 
-const EmployeeListElement = ({emplId, photo, fullName, filterUsers, getUsersTasks}) => {
+const EmployeeListElement = ({emplId, photo, fullName, getUsersTasks}) => {
     
     const { mobileMode, setMobileMode } = useContext(MobileContext);
+    const {filterUsers} = useContext(FilterUsers);
 
-    if (filterUsers.length < 2 || fullName.toLowerCase().includes(filterUsers.toLowerCase())) {
+    if (!filterUsers || filterUsers.length < 2 || fullName.toLowerCase().includes(filterUsers.toLowerCase())) {
         return (
             <div key = {emplId} className = 'employeeDiv'
                 onClick = {() => {
