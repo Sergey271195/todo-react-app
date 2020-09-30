@@ -1,0 +1,30 @@
+.datePickerMainDiv {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dateTable {
+    height: 60%;
+    width: 100%;
+    text-align: center;
+}
+
+.mothAndYearDiv {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 20px;
+    justify-content: space-around;
+}
+
+td {
+    border-bottom: 1px solid black
+}
+
+td.active {
+    background-color: #FDD835;
+}

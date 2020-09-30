@@ -18,6 +18,8 @@
     border-radius: 50%;
     padding: 5px;
     cursor: pointer;
+    margin-right: 20px;
+    font-size: 25px;
 }
 
 .dateInput {
@@ -27,19 +29,29 @@
 }
 
 
-/* ::-webkit-datetime-edit { display: none }
+::-webkit-datetime-edit { display: none }
 ::-webkit-datetime-edit-fields-wrapper {  display: none }
 ::-webkit-datetime-edit-text { display: none }
 ::-webkit-datetime-edit-month-field {  display: none }
 ::-webkit-datetime-edit-day-field {  display: none }
 ::-webkit-datetime-edit-year-field { display: none }
-::-webkit-inner-spin-button { display: none; } */
+::-webkit-inner-spin-button { display: none; }
+::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    font-size: 16px;
+    content: url('https://api.iconify.design/bx:bx-calendar-week.svg');
+    padding: 10px;
+    vertical-align: -0.125em;
+    background: url('https://api.iconify.design/bx:bxs-circle.svg?color=%23FDD835') no-repeat center center / contain;
+    outline: none;
+    border:none;
+}
 
 
 @media screen and (max-width: 600px) {
     .headerDiv {
         padding: 20px;
-        justify-content: center;
+        justify-content: space-between;
     }
     .dateWeek {
         font-size: 18px;
@@ -47,15 +59,3 @@
 
 }
 
-@media screen and (min-width: 800px) {
-    ::-webkit-calendar-picker-indicator {
-        cursor: pointer;
-        font-size: 16px;
-        content: url('https://api.iconify.design/bx:bx-calendar-week.svg');
-        padding: 10px;
-        vertical-align: -0.125em;
-        background: url('https://api.iconify.design/bx:bxs-circle.svg?color=%23FDD835') no-repeat center center / contain;
-        outline: none;
-        border:none;
-    }
-}

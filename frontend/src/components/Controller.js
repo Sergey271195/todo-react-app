@@ -16,6 +16,7 @@ import MobileMenuButtons from './MobileMenuButtons';
 import { UserLoading } from './context/UserLoadingContext';
 import { MobileContext } from './context/MobileContext';
 import FilterUsersProvider from './context/FilterUsers';
+import DatepickerComponent from './DatepickerComponent';
 
 const Contorller = () => {
 
@@ -27,6 +28,7 @@ const Contorller = () => {
     
     /* Mobile version */
     const { mobileMode, setMobileMode } = useContext(MobileContext);
+    const [mobileDate, setMobileDate] = useState(false)
 
     const prepareDailyList = (tasks) => {
         const dailyList = tasks.reduce((obj, taskObj) => {
@@ -89,18 +91,21 @@ const Contorller = () => {
                 : <EmployeeList setToggleMain = {setToggleMain}/>
                 }
                     <div className = 'contentDiv'>
-                        <DateHeader fetchDailyTasks = {fetchDailyTasks}/>
-                        {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
-                        { loadingUser ? <LoadingScreen /> :
-                            <>{ greeting ? <GoodMorningGreeting /> :
-                                    <>{toggleMain ? 
-                                        <>{ error ? <NotFoundScreen /> :
-                                            <DailyTasksList /> 
+                        <DateHeader fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/>
+                        {mobileDate ? <DatepickerComponent fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> : 
+                        <>
+                            {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
+                            { loadingUser ? <LoadingScreen /> :
+                                <>{ greeting ? <GoodMorningGreeting /> :
+                                        <>{toggleMain ? 
+                                            <>{ error ? <NotFoundScreen /> :
+                                                <DailyTasksList /> 
+                                            }</>
+                                            : <TasksList />
                                         }</>
-                                        : <TasksList />
                                     }</>
-                                }</>
-                            }
+                                }
+                            </>}
                         </>}
                             { mobileMode.mode ? <MobileMenuButtons setToggleMain = {setToggleMain}/>
                                 : <></> 
