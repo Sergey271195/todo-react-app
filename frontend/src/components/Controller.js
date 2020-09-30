@@ -92,21 +92,21 @@ const Contorller = () => {
                 }
                     <div className = 'contentDiv'>
                         <DateHeader fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/>
-                        {mobileDate ? <DatepickerComponent fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> : 
-                        <>
-                            {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
-                            { loadingUser ? <LoadingScreen /> :
-                                <>{ greeting ? <GoodMorningGreeting /> :
-                                        <>{toggleMain ? 
-                                            <>{ error ? <NotFoundScreen /> :
-                                                <DailyTasksList /> 
+                            {mobileDate ? <DatepickerComponent fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> : 
+                            <>
+                                {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
+                                { loadingUser ? <LoadingScreen /> :
+                                    <>{ greeting ? <GoodMorningGreeting /> :
+                                            <>{toggleMain ? 
+                                                <>{ error ? <NotFoundScreen /> :
+                                                    <DailyTasksList /> 
+                                                }</>
+                                                : <TasksList />
                                             }</>
-                                            : <TasksList />
                                         }</>
-                                    }</>
-                                }
+                                    }
+                                </>}
                             </>}
-                        </>}
                             { mobileMode.mode ? <MobileMenuButtons setToggleMain = {setToggleMain}/>
                                 : <></> 
                             }

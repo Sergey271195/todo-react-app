@@ -38,6 +38,13 @@
     background: #f1f1f1; 
 }
 
+.middleRowDiv {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 @media screen and (max-width: 600px) {
     .contentDiv {
         width: 100%;
