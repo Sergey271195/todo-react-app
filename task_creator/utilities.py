@@ -81,18 +81,12 @@ class TaskManager():
 
     ###Changes here
 
-    def get_todolist(self):
-        try:
-            todolist = DailyTaskList.objects.get(date = datetime.date.today())
-            return todolist
-        except DailyTaskList.DoesNotExist:
-            todolist = DailyTaskList(date = datetime.date.today())
-            todolist.save()
-            print('Creating new date object')
-            yesterday = (timezone.localtime(timezone.now()) - datetime.timedelta(days = 1)).date()
-            print('Cleaning yesterday')
-            yesterday_tasks = self.get_daily_tasks(yesterday)
-            print(yesterday_tasks)
+    def clean_yesterday(self):
+        print('Creating new date object')
+        yesterday = (timezone.localtime(timezone.now()) - datetime.timedelta(days = 1)).date()
+        print('Cleaning yesterday')
+        yesterday_tasks = self.get_daily_tasks(yesterday)
+        if yesterday_tasks:
             for task in yesterday_tasks:
                 print(task, task.active, 'for task in tasks', task.starting_time)
                 if task.active:
@@ -102,6 +96,15 @@ class TaskManager():
                     task.total_time += delta_time
                     print(delta_time)
                     task.save()
+
+    def get_todolist(self):
+        try:
+            todolist = DailyTaskList.objects.get(date = datetime.date.today())
+            return todolist
+        except DailyTaskList.DoesNotExist:
+            todolist = DailyTaskList(date = datetime.date.today())
+            todolist.save()
+            #self.clean_yesterday()
             return todolist
 
     def get_todolist_by_date(self, date):
@@ -109,7 +112,6 @@ class TaskManager():
             todolist = DailyTaskList.objects.get(date = date)
             return todolist
         except DailyTaskList.DoesNotExist:
-            self.get_todolist()
             return None
 
     def get_daily_tasks(self, date):

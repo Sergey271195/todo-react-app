@@ -77,7 +77,6 @@ def addTaskToDailyList(task, todolist, employee_id, priority, comment = None):
     except DailyTaskConnector.DoesNotExist:
         employee = Employee.objects.get(bitrix_id = employee_id)
         connector = DailyTaskConnector(employee_id = employee, task_list = todolist, task = task, priority = priority)
-        print(connector.__dict__)
         connector.save()
         if comment:
             createComment(connector = connector, comment = comment)
@@ -89,6 +88,7 @@ def dailyTaskManagerView(request, date):
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
     empManager = EmployeeManager(bitrix)
+    curr_tasks = tskManager.get_todolist()
     daily_tasks = tskManager.get_daily_tasks(date)
     if daily_tasks:
         serializer = DailyTaskConnectorSerializer(daily_tasks, many = True)

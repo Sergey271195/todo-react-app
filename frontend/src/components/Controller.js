@@ -17,6 +17,7 @@ import { UserLoading } from './context/UserLoadingContext';
 import { MobileContext } from './context/MobileContext';
 import FilterUsersProvider from './context/FilterUsers';
 import DatepickerComponent from './DatepickerComponent';
+import { EmployeeContext } from './context/EmployeeContext';
 
 const Contorller = () => {
 
@@ -24,6 +25,7 @@ const Contorller = () => {
     const {loadingUser, setLoadingUser} = useContext(UserLoading)
     const [error, setError] = useState(false)
     const { dispatchDaily } = useContext(DailyContext)
+    const { currEmployee } = useContext(EmployeeContext)
     const [ greeting, setGreeting ] = useState(false)
     
     /* Mobile version */
@@ -101,7 +103,7 @@ const Contorller = () => {
                                                 <>{ error ? <NotFoundScreen /> :
                                                     <DailyTasksList /> 
                                                 }</>
-                                                : <TasksList />
+                                                : <>{currEmployee ? <TasksList /> : <DailyTasksList/>}</>
                                             }</>
                                         }</>
                                     }
