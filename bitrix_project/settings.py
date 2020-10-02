@@ -10,7 +10,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')  == 'True'
 
-ALLOWED_HOSTS = [] if DEBUG else ['bitrix-todo-app.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [] if DEBUG else ['bitrix-todo-app.herokuapp.com', 'localhost', '127.0.0.1',
+ 'todo.illuminator3000.ru', 'http://todo.illuminator3000.ru/']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
