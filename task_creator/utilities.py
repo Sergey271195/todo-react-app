@@ -4,6 +4,7 @@ from .models import Employee, Task, DailyTaskConnector, DailyTaskList
 from task_creator.bitrix24 import BitrixIntegrator
 
 import datetime
+import inspect
 
 def not_found_response():
     return JsonResponse({'status': 404})
@@ -98,20 +99,25 @@ class TaskManager():
                     task.save()
 
     def get_todolist(self):
+        print(inspect.stack()[1].function)
         try:
+            print('Commented function')            
             todolist = DailyTaskList.objects.get(date = datetime.date.today())
             return todolist
         except DailyTaskList.DoesNotExist:
+            print('Commented function creating new entry')
             todolist = DailyTaskList(date = datetime.date.today())
             todolist.save()
-            #self.clean_yesterday()
+            self.clean_yesterday()
             return todolist
 
     def get_todolist_by_date(self, date):
         try:
+            print('Uncommented func')
             todolist = DailyTaskList.objects.get(date = date)
             return todolist
         except DailyTaskList.DoesNotExist:
+            print('Uncommented func returning none')
             return None
 
     def get_daily_tasks(self, date):

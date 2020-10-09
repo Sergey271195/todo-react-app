@@ -213,7 +213,6 @@ def shiftTasksView(request):
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
         
-
     if request.method == 'POST':
         request_body = json.loads(request.body)
         todolist = tskManager.get_todolist()

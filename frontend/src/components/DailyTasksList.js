@@ -17,6 +17,7 @@ const DailyTasksList = () => {
     const { dailyTasks } = useContext(DailyContext)
 
     useEffect(() => {
+        if (dailyTasks.tasks.length === 0) return;
         postFetch({url: `api/tasks/shift`, data: dailyTasks.tasks})
     }, [dailyTasks])
 

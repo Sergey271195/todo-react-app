@@ -10,8 +10,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')  == 'True'
 
-ALLOWED_HOSTS = [] if DEBUG else ['bitrix-todo-app.herokuapp.com', 'localhost', '127.0.0.1',
- 'todo.illuminator3000.ru', 'http://todo.illuminator3000.ru/']
+ALLOWED_HOSTS = ['*'] if DEBUG else ['bitrix-todo-app.herokuapp.com', 'localhost', '127.0.0.1',
+ 'todo.illuminator3000.ru', 'http://todo.illuminator3000.ru/', '185.22.233.212', '185.22.233.212', '[::1]']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,6 +65,19 @@ DATABASES = {
 }
 
 
+
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bitrixproject',
+        'USER': 'bitrixuser',
+        'PASSWORD': 'securebitrixpassword',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+} """
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -96,7 +110,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_URL = '/frontend/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "frontend/static")
+
 
 
 #django_heroku.settings(locals())

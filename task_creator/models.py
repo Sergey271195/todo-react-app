@@ -20,7 +20,7 @@ class Task(models.Model):
     deadline = models.DateField(blank = True, null = True)
 
 class DailyTaskList(models.Model):
-    date = models.DateField(default = datetime.datetime.now, blank = True)
+    date = models.DateField(default = datetime.datetime.now, blank = True, unique = True)
 
 class DailyTaskConnector(models.Model):
     employee_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
