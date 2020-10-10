@@ -49,6 +49,8 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
 
     const startTracking = () => {
         if (dailyTasks.tasks[employee][index].completed) return
+        const activeArray = dailyTasks.tasks[employee].filter(item => item.time.active)
+        if (activeArray.length > 0) return
         dispatchDaily({type: 'SWITCH_ACTIVE', taskId, active})
         fetch(`api/time/start&user${emplId}&task${taskId}`)
             .then(response => response.json())

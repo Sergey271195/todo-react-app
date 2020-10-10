@@ -9,6 +9,7 @@
 }
 
 .commentInputForm {
+    width: 90%;
     outline: none;
     border: none;
     border-bottom: 2px solid transparent;

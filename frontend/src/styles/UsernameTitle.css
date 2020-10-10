@@ -19,6 +19,7 @@
 
 .addTaskInput {
     font-size: 12px;
+    width: 250%;
     outline: none;
     border: none;
     border-bottom: 2px solid transparent;

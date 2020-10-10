@@ -151,7 +151,7 @@ def addTaskView(request, emplId):
 
 @csrf_exempt
 def createTaskView(request, emplId):
-
+    
     bitrix = BitrixIntegrator()
     tskManager = TaskManager(bitrix)
 

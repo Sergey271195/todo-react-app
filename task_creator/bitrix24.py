@@ -75,9 +75,10 @@ class BitrixIntegrator():
     def add_task(self, fields):
         method_url = f'{self.main_url}/tasks.task.add?'
         fields = '&'.join([f'fields[{key}]={value}' for key, value in fields.items()])
-        request_url = method_url + fields + '&fields[AUDITORS][0]=26'
+        request_url = method_url + fields + '&fields[AUDITORS][0]=26&fields[AUDITORS][1]=1&fields[CREATED_BY_NAME]=Нея'
         req = requests.get(request_url)
-        return req.json()
+        json_ = req.json()
+        return json_
 
     def get_task_by_id(self, task_id):
         method_url = f'{self.main_url}/tasks.task.get?taskId={task_id}'
