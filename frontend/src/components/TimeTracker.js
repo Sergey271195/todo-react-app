@@ -11,7 +11,7 @@ const handleTime = (time) => {
     }
 }
 
-const TimeTracker = ({emplId, taskId, time, rightDate}) => {
+const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
 
     const [tracking, setTracking] = useState({
         hours: 0,
@@ -19,8 +19,8 @@ const TimeTracker = ({emplId, taskId, time, rightDate}) => {
         seconds: 0,
         total: 0
     })
-    const { active, startingTime, endingTime, totalTime } = time
-    const { dispatchDaily } = useContext(DailyContext)
+    const { active, startingTime, totalTime } = time
+    const { dailyTasks, dispatchDaily } = useContext(DailyContext)
 
     useEffect(() => {
         setTracking(handleTime(totalTime))
@@ -48,14 +48,15 @@ const TimeTracker = ({emplId, taskId, time, rightDate}) => {
 
 
     const startTracking = () => {
-        dispatchDaily({type: 'SWITCH_ACTIVE', taskId, emplId, active, startingTime, endingTime, totalTime})
+        if (dailyTasks.tasks[employee][index].completed) return
+        dispatchDaily({type: 'SWITCH_ACTIVE', taskId, active})
         fetch(`api/time/start&user${emplId}&task${taskId}`)
             .then(response => response.json())
                 .then(data => console.log(data))
     }
 
     const stopTracking = () => {
-        dispatchDaily({type: 'SWITCH_ACTIVE', taskId, emplId, active, startingTime, endingTime, totalTime})
+        dispatchDaily({type: 'SWITCH_ACTIVE', taskId, active})
         fetch(`api/time/end&user${emplId}&task${taskId}`)
             .then(response => response.json())
                 .then(data => console.log(data))
@@ -64,8 +65,8 @@ const TimeTracker = ({emplId, taskId, time, rightDate}) => {
     return (
         <>
         {rightDate ? <>{
-        active ? <BiPauseCircle className = 'timeBtn' onClick = {() => stopTracking()}/> 
-        : <BiTimeFive className = 'timeBtn' onClick = {() => startTracking()}/>
+        active ? <BiPauseCircle className = 'timeBtn' onClick = {() => stopTracking()} title = 'Завершить учет затраченного времени (Затраченное время будет сохранено в Битрикс24)'/> 
+        : <BiTimeFive className = 'timeBtn' onClick = {() => startTracking()} title = 'Начать учет затраченного времени'/>
         }</> : <></>}
         <div className = 'timeNum'>{`${tracking.hours}:${tracking.minutes >= 10 ?  
                 tracking.minutes: '0'+tracking.minutes}:${tracking.seconds >= 10 ?

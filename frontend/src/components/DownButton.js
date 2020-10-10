@@ -9,7 +9,7 @@ const DownButton = ({rightDate, index, employee}) => {
     const { dispatchDaily } = useContext(DailyContext)
 
     if (rightDate) {
-        return <FiArrowDown className = 'btnIcon' 
+        return <FiArrowDown className = 'btnIcon' title = 'Уменьшение приоритета задачи (Опустить задачу в списке)'
             onClick = {() => dispatchDaily({type: 'MOVE_DOWN', employee: employee, index: index})}/>
     }
     return <></>

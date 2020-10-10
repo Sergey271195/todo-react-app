@@ -17,7 +17,7 @@ const DateHeader = ({fetchDailyTasks, mobileDate, setMobileDate}) => {
         <div className = 'headerDiv' style = {mode ? {...DARK, ...DARKBACKGROUND} : {...LIGHT, ...LIGHTBACKGROUND}}>
             <div className = 'dateWeek'>{formatDate(currentDate)}</div>
             {mobileMode.mode ? <BiCalendarWeek className = 'dateIcon' onClick = {() => setMobileDate(!mobileDate)}/> : 
-            <input type = 'date' className = 'dateInput' 
+            <input type = 'date' className = 'dateInput' title = 'Просмотр списка задач всех сотрудников за выбранную дату'
                 onChange = {(event) => {setCurrentDate(event.target.value), fetchDailyTasks(event.target.value)}}/>
             }
         </div>

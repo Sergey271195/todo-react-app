@@ -13,6 +13,7 @@ from .models import Employee, Task, DailyTaskConnector, DailyTaskList, Comment
 
 from .utilities import EmployeeManager, TaskManager, not_found_response, success_response
 from task_creator.bitrix24 import BitrixIntegrator
+from .time_tracker import endView
 
 
 
@@ -45,13 +46,16 @@ def sort_priorities(employee_id, old_priority, new_priority):
 
 
 def createComment(connector, comment):
+    bitrix = BitrixIntegrator()
+    task = Task.objects.get(id = connector.task_id)
+    task_id = task.bitrix_id
     new_comment = Comment(task_connector = connector, content = comment)
     new_comment.save()
+    bitrix.add_comment(task_id = task_id, comment = comment)
     return new_comment
 
 def addExistingTask(task):
     try:
-        print('Exisiting task')
         responsible = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('responsibleId')))).data
         creator = EmployeeSerializer(Employee.objects.get(bitrix_id = int(task.get('createdBy')))).data
         new_serializer = TaskSerializer(data = {'employee_id': responsible, 'creator_id': creator,
@@ -138,7 +142,6 @@ def addTaskView(request, emplId):
                 db_task = addExistingTask(task)
             if db_task:
                 priority = get_last_task_index(db_task.employee_id.bitrix_id) + 1
-                print(priority)
                 todolist = tskManager.get_todolist()
                 new_task = addTaskToDailyList(task = db_task, todolist = todolist, priority = priority, employee_id = emplId)
                 if new_task:
@@ -155,7 +158,6 @@ def createTaskView(request, emplId):
     if request.method == 'POST':
         request_body = json.loads(request.body)
         todolist = tskManager.get_todolist()
-        print(request_body)
         bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'))
         
         task = bitrix_response['result']['task']
@@ -177,8 +179,14 @@ def completeTaskView(request, pk):
         db_task = DailyTaskConnector.objects.get(id = pk)
         db_task.completed = not db_task.completed
         db_task.save()
+        if (db_task.active):
+            serializer = DailyTaskConnectorSerializer(db_task)
+            task_id = serializer.data['task']['bitrix_id']
+            user_id = db_task.employee_id.bitrix_id
+            return endView(None, task_id = task_id, user_id = user_id)
         return success_response()
     except Exception as e:
+        print(e)
         return not_found_response()
 
 

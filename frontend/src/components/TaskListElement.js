@@ -31,7 +31,7 @@ const TaskListElement = ({taskId, title, emplId, fullName}) => {
 
     return (
         <div key = {taskId} className = {'tasksDiv' + (included ?  ' included': '')}
-                onClick = {included ? () => removeTask() : () => addExistingTask()}
+                onClick = {included ? () => removeTask() : () => addExistingTask()} title = 'Добавить/удалить задачу из списка задач на текущий день'
             >
                 <div className = 'taskDivWrapper'>
                     {title}

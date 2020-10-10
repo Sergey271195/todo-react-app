@@ -9,7 +9,7 @@ const UpButton = ({rightDate, index, employee}) => {
     const { dispatchDaily } = useContext(DailyContext)
 
     if (rightDate) {
-        return <FiArrowUp className = 'btnIcon' 
+        return <FiArrowUp className = 'btnIcon' title = 'Увеличение приоритета задачи (Поднять задачу в списке)'
             onClick = {() => dispatchDaily({type: 'MOVE_UP', employee: employee, index: index})}/>
     }
     return <></>

@@ -1,4 +1,5 @@
 .btnIcon {
+    cursor: pointer;
     padding: 5px;
     background-color: #FDD835;
     font-size: 15px;

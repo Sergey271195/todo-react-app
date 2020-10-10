@@ -46,7 +46,7 @@ export const DailyTasksReducer = (state, action) => {
                 })
                 return obj
             }, {})
-            return {tasksId: state.taskId, tasks: updated_tasks}
+            return {tasksId: state.tasksId, tasks: updated_tasks}
         }
         default:
             return state

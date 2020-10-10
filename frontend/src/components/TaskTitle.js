@@ -4,13 +4,13 @@ import '../styles/TaskTitle.css'
 import { ModeContext } from './context/ModeContext'
 import { DARK, LIGHT } from './Utils'
 
-const TaskTitle = ({url, title, completed}) => {
+const TaskTitle = ({url, titleName, completed}) => {
 
     const { mode } = useContext(ModeContext)
 
-    return <div className = {'taskTitleDiv'}>
+    return <div className = {'taskTitleDiv'} title = 'Перейти на страницу задачи в Битрикс24'>
             <a href = {url} className = {'taskLink' + (completed ? ' completed': '')} 
-                style = {mode ? DARK: LIGHT} target = '_blank'>{title}</a>
+                style = {mode ? DARK: LIGHT} target = '_blank'>{titleName}</a>
         </div>
 }
 

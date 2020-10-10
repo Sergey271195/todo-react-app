@@ -25,8 +25,15 @@
     border-bottom: 2px solid transparent;
 }
 
+.filterUser::placeholder {
+    color: transparent;
+}
+
 .filterUser:focus {
     border-bottom: 2px solid #FDD835;
+}
+.filterUser:focus::placeholder {
+    color: #1F1F1F;
 }
 .filterUser:hover {
     border-bottom: 2px solid #FDD835;

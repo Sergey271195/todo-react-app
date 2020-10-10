@@ -50,7 +50,7 @@ const AddNewTaskForm = ({emplId, mainList}) => {
 
     return (
         <div className = 'addTaskContainer'>
-            <BiPlus className = 'plusIcon' onClick = {() => submitHandler()}/>
+            <BiPlus className = 'plusIcon' onClick = {() => submitHandler()} title = 'Добавить новую задачу в список задач на день (добавляется и в Битрикс24)'/>
             <div className = 'addTaskInputContainer'>
                 <input className = 'addTaskInput' placeholder = 'Добавить задачу' style = {mode ? DARK: LIGHT}
                     value = {formData.title}

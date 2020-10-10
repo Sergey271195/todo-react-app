@@ -6,7 +6,7 @@ export const DailyContext = createContext();
 
 const DailyContextProvider = (props) => {
 
-    const [dailyTasks, dispatchDaily] = useReducer(DailyTasksReducer, {tasks: [], tasksId: []})
+    const [dailyTasks, dispatchDaily] = useReducer(DailyTasksReducer, {tasks: {}, tasksId: []})
 
     return (
         <DailyContext.Provider value = {{dailyTasks, dispatchDaily}}>

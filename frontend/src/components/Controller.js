@@ -24,7 +24,7 @@ const Contorller = () => {
     const [toggleMain, setToggleMain] = useState(true)
     const {loadingUser, setLoadingUser} = useContext(UserLoading)
     const [error, setError] = useState(false)
-    const { dispatchDaily } = useContext(DailyContext)
+    const { dailyTasks, dispatchDaily } = useContext(DailyContext)
     const { currEmployee } = useContext(EmployeeContext)
     const [ greeting, setGreeting ] = useState(false)
     
@@ -70,6 +70,11 @@ const Contorller = () => {
     useEffect(() => {
         fetchDailyTasks(getCurrentDate())
     }, [])
+
+    useEffect(() => {
+        if (dailyTasks.tasksId.length === 0) return;
+        setError(false)
+    }, [dailyTasks])
 
     useEffect(() => {
         const handleWindowResize = () => {

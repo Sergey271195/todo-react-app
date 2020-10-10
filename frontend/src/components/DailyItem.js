@@ -11,7 +11,7 @@ import UpButton from './UpButton'
 
 import { getCurrentDate } from './Utils'
 
-const DailyTask = ({title, comments, completed, pk, index, employee,
+const DailyTask = ({title: titleName, comments, completed, pk, index, employee,
                 emplId, taskId, time }) => {
 
     const {dailyTasks, dispatchDaily} = useContext(DailyContext)
@@ -23,8 +23,10 @@ const DailyTask = ({title, comments, completed, pk, index, employee,
         fetch(`api/tasks/complete${pk}`)
         .then((response) => {return response.json()})
         .then((data) => {
-            if (data.status == 200) {
+            if (data.status !== 404) {
                 dispatchDaily({type: 'TOGGLE_TASK', pk: pk, employee: employee})
+                if (data.status === 200) return
+                dispatchDaily({type: 'SWITCH_ACTIVE', taskId, active: true})
             }
         })
         
@@ -39,12 +41,12 @@ const DailyTask = ({title, comments, completed, pk, index, employee,
                 <div className = 'dailyItemContentDiv'>
 
                     <TaskTitle url = {`https://illuminator3000.bitrix24.ru/company/personal/user/${emplId}/tasks/task/view/${taskId}/`} 
-                        title = {title} completed = {completed} />
+                        titleName = {titleName} completed = {completed} />
                     
                     {mobileMode.mode ? 
                     <div className = 'mobileVersionDiv'>
                         <div className ={'timeDiv' + (rightDate ? '': ' only')}>
-                            <TimeTracker emplId = {emplId} taskId = {taskId} time = {time} rightDate = {rightDate}/>
+                            <TimeTracker emplId = {emplId} taskId = {taskId} time = {time} rightDate = {rightDate} employee = {employee} index = {index}/>
                         </div>
                         {
                             index !=  0 ? 
@@ -65,7 +67,7 @@ const DailyTask = ({title, comments, completed, pk, index, employee,
                 {!mobileMode.mode ?
                 <>
                     <div className ={'timeDiv' + (rightDate ? '': ' only')}>
-                        <TimeTracker emplId = {emplId} taskId = {taskId} time = {time} rightDate = {rightDate}/>
+                        <TimeTracker emplId = {emplId} taskId = {taskId} time = {time} rightDate = {rightDate} employee = {employee} index = {index}/>
                     </div>
                     {
                         index !=  0 ? 

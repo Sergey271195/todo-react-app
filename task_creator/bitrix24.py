@@ -90,6 +90,11 @@ class BitrixIntegrator():
         request = requests.get(request_url)
         response = request.json()
 
+    def add_comment(self, task_id, comment):
+        method_url = f'{self.main_url}/task.commentitem.add?TASKID={task_id}&FIELDS[POST_MESSAGE]={comment}'
+        req = requests.get(method_url)
+        response = req.json()
+
 
 if __name__ == "__main__":
     bitrix = BitrixIntegrator()

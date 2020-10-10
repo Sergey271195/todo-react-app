@@ -17,10 +17,10 @@ const DailyTasksList = () => {
     const { dailyTasks } = useContext(DailyContext)
 
     useEffect(() => {
-        if (dailyTasks.tasks.length === 0) return;
+        if (!dailyTasks.tasks.length) return;
         postFetch({url: `api/tasks/shift`, data: dailyTasks.tasks})
     }, [dailyTasks])
-
+    
     return (
         <div className = {'dailyTasksDiv' + (mode ? ' dark': ' light')} >
             {Object.keys(dailyTasks.tasks).map((employee) => {

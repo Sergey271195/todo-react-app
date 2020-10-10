@@ -10,7 +10,7 @@ const EmployeeListElement = ({emplId, photo, fullName, getUsersTasks}) => {
 
     if (!filterUsers || filterUsers.length < 2 || fullName.toLowerCase().includes(filterUsers.toLowerCase())) {
         return (
-            <div key = {emplId} className = 'employeeDiv'
+            <div key = {emplId} className = 'employeeDiv' title = 'Просмотр задач данного сотрудника (из Битрикс24)'
                 onClick = {() => {
                     getUsersTasks(emplId)
                     if (mobileMode.mode) {

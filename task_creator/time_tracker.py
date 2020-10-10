@@ -47,3 +47,6 @@ def endView(request, task_id, user_id):
         return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
     except DailyTaskConnector.DoesNotExist:
         return not_found_response()
+
+def test_view(request, data):
+    return JsonResponse({'status': 200})
