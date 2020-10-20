@@ -19,8 +19,16 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
         seconds: 0,
         total: 0
     })
+
+    const managersIds = [26, 334, 406]
+
     const { active, startingTime, totalTime } = time
     const { dailyTasks, dispatchDaily } = useContext(DailyContext)
+    const [ manager, setManager ] = useState(true)
+
+    useEffect(() => {
+        managersIds.includes(emplId) ? setManager(true): setManager(false)
+    }, [emplId])
 
     useEffect(() => {
         setTracking(handleTime(totalTime))
@@ -66,14 +74,14 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
 
     return (
         <>
-        {rightDate ? <>{
+        {(rightDate && !manager) ? <>{
         active ? <BiPauseCircle className = 'timeBtn' onClick = {() => stopTracking()} title = 'Завершить учет затраченного времени (Затраченное время будет сохранено в Битрикс24)'/> 
         : <BiTimeFive className = 'timeBtn' onClick = {() => startTracking()} title = 'Начать учет затраченного времени'/>
         }</> : <></>}
-        <div className = 'timeNum'>{`${tracking.hours}:${tracking.minutes >= 10 ?  
+        {!manager && <div className = 'timeNum'>{`${tracking.hours}:${tracking.minutes >= 10 ?  
                 tracking.minutes: '0'+tracking.minutes}:${tracking.seconds >= 10 ?
                     tracking.seconds: '0'+tracking.seconds}`}
-        </div>
+        </div>}
         </>
         
     )

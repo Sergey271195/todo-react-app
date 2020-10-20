@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import datetime
 
 class Employee(models.Model):
@@ -8,6 +9,14 @@ class Employee(models.Model):
     full_name = models.CharField(max_length = 50)
     is_main = models.BooleanField(default = False)
     photo = models.CharField(max_length = 300, default = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg", blank=True, null=True)
+    
+
+class AuthModel(models.Model):
+    employee = models.ForeignKey(Employee, related_name = 'auth', on_delete = models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_admin = models.BooleanField(default = False)
+    bitrix_token = models.CharField(max_length = 200, null = True, blank = True)
+
 
 class Task(models.Model):
     employee_id = models.ForeignKey(Employee, related_name='employee', on_delete=models.CASCADE)

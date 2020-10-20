@@ -10,26 +10,32 @@ import ModeContextProvider from "./context/ModeContext";
 import MobileContextProvider from "./context/MobileContext";
 
 import Contorller from "./Controller";
+import AuthContextProvider from "./context/AuthContext";
+import ViewsContextProvider from "./context/ViewsContext";
 
 
 const App = () => {
 
     return (
-      <EmployeeContextProvider>
-        <DailyContextProvider>
-          <MainEmployeeProvider>
-            <UserLoadingProvider>
-              <CurrentDateProvider>
-                <ModeContextProvider>
-                  <MobileContextProvider>
-                    <Contorller />
-                  </MobileContextProvider>
-                </ModeContextProvider>
-              </CurrentDateProvider>
-            </UserLoadingProvider>
-          </MainEmployeeProvider>
-        </DailyContextProvider>
-      </EmployeeContextProvider>
+      <AuthContextProvider>
+        <EmployeeContextProvider>
+          <DailyContextProvider>
+            <MainEmployeeProvider>
+              <UserLoadingProvider>
+                <CurrentDateProvider>
+                  <ViewsContextProvider>
+                    <ModeContextProvider>
+                      <MobileContextProvider>
+                        <Contorller />
+                      </MobileContextProvider>
+                    </ModeContextProvider>
+                  </ViewsContextProvider>
+                </CurrentDateProvider>
+              </UserLoadingProvider>
+            </MainEmployeeProvider>
+          </DailyContextProvider>
+        </EmployeeContextProvider>
+      </AuthContextProvider>
     );
   }
 

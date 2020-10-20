@@ -9,17 +9,19 @@ import { UserLoading } from "./context/UserLoadingContext";
 import EmployeeListElement from "./EmployeeListElement";
 import { ModeContext } from "./context/ModeContext";
 import { DARK, DARKBACKGROUND, LIGHT, LIGHTBACKGROUND } from "./Utils";
+import { ViewsContext } from "./context/ViewsContext";
 
-const EmployeeList = ({setToggleMain}) => {
+const EmployeeList = () => {
 
     const {mode} = useContext(ModeContext)
     const {dispatch} = useContext(EmployeeContext)
     const {employee, setEmployee} = useContext(MainEmployee)
     const {setLoadingUser} = useContext(UserLoading)
+    const {dispatchView} = useContext(ViewsContext)
 
     const returnToMain = () => {
         localStorage.removeItem('employee')
-        setToggleMain(true)
+        dispatchView({type: 'MAIN'})
       }
 
     const fetchUsers = () => {
@@ -53,7 +55,7 @@ const EmployeeList = ({setToggleMain}) => {
         .then(emplData => {
                 dispatch({type: 'CHANGE_USER', emplData : emplData})
                 setLoadingUser(false)
-                setToggleMain(false)
+                dispatchView({type: 'EMPLOYEE'})
             })
         }
 

@@ -2,8 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 
 /* Icons */
 import { BiUser } from 'react-icons/bi';
-import { BsCheckCircle, BsSearch } from 'react-icons/bs';
+import { BsCheckCircle } from 'react-icons/bs';
 import { VscHome, VscChromeClose } from "react-icons/vsc";
+import { FiLogIn, FiLogOut } from 'react-icons/fi'
 
 /* Context */
 import { MobileContext } from './context/MobileContext';
@@ -11,16 +12,20 @@ import { MobileContext } from './context/MobileContext';
 /* Styling */
 import '../styles/MobileMenu.css';
 import { FilterUsers } from './context/FilterUsers';
+import { ViewsContext } from './context/ViewsContext';
+import { AuthContext } from './context/AuthContext';
 
-const MobileMenuButtons = ({setToggleMain}) => {
+const MobileMenuButtons = () => {
 
 
     const { setMobileMode } = useContext(MobileContext);
     const {filterUsers, setFilterUsers} = useContext(FilterUsers);
+    const {dispatchView} = useContext(ViewsContext)
+    const {auth, dispatchAuth} = useContext(AuthContext)
     const [search, setSearch] = useState(false)
 
     useEffect(() => {
-        setToggleMain(true)
+        dispatchView({type: 'MAIN'})
     }, [])
 
     return (
@@ -47,15 +52,17 @@ const MobileMenuButtons = ({setToggleMain}) => {
                             mode: true,
                             menu: false
                         })
-                        setToggleMain(true)
+                        dispatchView({type: 'MAIN'})
                     }}>
                         <VscHome className = 'mobileMenuIcon' />
                         <label className = 'mobileMenuLabel'>Главная</label>
                 </div>
-                <div className = 'mobileMenuDiv' onClick = {() => setMobileMode({
+                <div className = 'mobileMenuDiv' onClick = {() => {
+                    setMobileMode({
                         mode: true,
                         menu: true
-                    })}>
+                    }),
+                    dispatchView({type: 'MOBILEMENU'})}}>
                     <BiUser className = 'mobileMenuIcon' />
                     <label className = 'mobileMenuLabel'>Сотрудники</label>
                 </div>
@@ -65,21 +72,30 @@ const MobileMenuButtons = ({setToggleMain}) => {
                         mode: true,
                         menu: false
                     })
-                    setToggleMain(false)
+                    dispatchView({type: 'EMPLOYEE'})
                 }}>
                     <BsCheckCircle className = 'mobileMenuIcon' />
                     <label className = 'mobileMenuLabel'>Задачи</label>
                 </div>
-                
+
                 <div className = 'mobileMenuDiv' onClick = {() => {
-                    setSearch(!search)
-                    setMobileMode({
-                        mode: true,
-                        menu: true
-                    })
+
                 }}>
-                    <BsSearch className = 'mobileMenuIcon' />   
-                    <label className = 'mobileMenuLabel'>Поиск</label> 
+                    {auth.authenticated ? 
+                    <>
+                        <FiLogOut onClick = {() => {
+                            dispatchAuth({type: 'LOGOUT'}),
+                            dispatchView({type: 'LOGIN'})
+                        }} className = 'mobileMenuIcon'/>
+                        <label className = 'mobileMenuLabel'>{auth.username}</label> 
+                    </>
+                    : 
+                    <>
+                    <FiLogIn className = 'mobileMenuIcon'
+                        onClick = {() => dispatchView({type: 'LOGIN'})}/>
+                    <label className = 'mobileMenuLabel'>Войти</label> 
+                    </>}
+                    
                 </div>
                 
                 
@@ -93,3 +109,16 @@ const MobileMenuButtons = ({setToggleMain}) => {
 
 
 export default MobileMenuButtons
+
+//If you will need to reimplement search
+
+{/* <div className = 'mobileMenuDiv' onClick = {() => {
+    setSearch(!search)
+    setMobileMode({
+        mode: true,
+        menu: true
+    })
+}}>
+    <BsSearch className = 'mobileMenuIcon' />   
+    <label className = 'mobileMenuLabel'>Поиск</label> 
+</div> */}

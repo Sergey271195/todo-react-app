@@ -18,6 +18,27 @@ export const postFetch = ({url, data}) => {
         }).then(response => response.json())
 }
 
+export const postFetchAuth = ({url, data, token}) => {
+    return fetch(url, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Token ' + token
+            },
+        body: JSON.stringify(data)
+        }).then(response => response.json())
+}
+
+export const getAuth = ({url, token}) => {
+    return fetch(url, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': 'Token ' + token
+            }
+        }).then(response => response.json())
+}
+
 export const saveToLocalStorage = ({key, data}) => {
     localStorage.setItem(key, JSON.stringify(data))
 }
@@ -49,6 +70,10 @@ export const DARKBACKGROUND = {
 
 export const LIGHTBACKGROUND = {
     backgroundColor: '#FFFFFF'
+}
+
+export const TRANSPARENTBACKGROUND = {
+    backgroundColor: 'transparent'
 }
 
 export const Months = {

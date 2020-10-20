@@ -2,16 +2,18 @@ import React, { useState, useContext } from 'react'
 import { BiPlus } from "react-icons/bi"
 
 import '../styles/UsernameTitle.css'
+import { AuthContext } from './context/AuthContext'
 import { DailyContext } from './context/DailyTasksContext'
 import { EmployeeContext } from './context/EmployeeContext'
 import { ModeContext } from './context/ModeContext'
-import { LIGHT, DARK, fetchDataHandler, postFetch } from './Utils'
+import { LIGHT, DARK, fetchDataHandler, postFetchAuth } from './Utils'
 
 const AddNewTaskForm = ({emplId, mainList}) => {
 
     const { mode } = useContext(ModeContext)
     const { dispatch } = useContext(EmployeeContext)
     const { dispatchDaily } = useContext(DailyContext)
+    const { auth } = useContext(AuthContext)
 
     const submitHandler = () => {
 
@@ -26,7 +28,7 @@ const AddNewTaskForm = ({emplId, mainList}) => {
                 comment: formData.comment,
                 responsibleId: emplId
             }
-            postFetch({url: `api/tasks/create${emplId}`, data: data})
+            postFetchAuth({url: `api/tasks/create${emplId}`, data: data, token: auth.key})
                 .then(data => {
                     if (data.status !== 404) {
                         const task = fetchDataHandler(data)
@@ -48,24 +50,28 @@ const AddNewTaskForm = ({emplId, mainList}) => {
         comment: ''
     })
 
-    return (
-        <div className = 'addTaskContainer'>
-            <BiPlus className = 'plusIcon' onClick = {() => submitHandler()} title = 'Добавить новую задачу в список задач на день (добавляется и в Битрикс24)'/>
-            <div className = 'addTaskInputContainer'>
-                <input className = 'addTaskInput' placeholder = 'Добавить задачу' style = {mode ? DARK: LIGHT}
-                    value = {formData.title}
-                    onChange = {(event) => setFormData({...formData, title: event.target.value})}
-                />
-                {formData.title !== '' ?
-                    <input className = 'addTaskInput' placeholder = 'Добавить комментарий' style = {mode ? DARK: LIGHT}
-                        value = {formData.comment}
-                        onChange = {(event) => setFormData({...formData, comment: event.target.value})}
+    if (auth.authenticated) {
+        return (
+            <div className = 'addTaskContainer'>
+                <BiPlus className = 'plusIcon' onClick = {() => submitHandler()} title = 'Добавить новую задачу в список задач на день (добавляется и в Битрикс24)'/>
+                <div className = 'addTaskInputContainer'>
+                    <input className = 'addTaskInput' placeholder = 'Добавить задачу' style = {mode ? DARK: LIGHT}
+                        value = {formData.title}
+                        onChange = {(event) => setFormData({...formData, title: event.target.value})}
                     />
-                    : <></>
-                }
-            </div> 
-        </div>
-    )
+                    {formData.title !== '' ?
+                        <input className = 'addTaskInput' placeholder = 'Добавить комментарий' style = {mode ? DARK: LIGHT}
+                            value = {formData.comment}
+                            onChange = {(event) => setFormData({...formData, comment: event.target.value})}
+                        />
+                        : <></>
+                    }
+                </div> 
+            </div>
+        )
+    }
+    return <></>
+    
 }
 
 export default AddNewTaskForm

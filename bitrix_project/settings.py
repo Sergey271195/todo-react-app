@@ -1,6 +1,32 @@
 from pathlib import Path
 import os
-#import django_heroku
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': './logs/main.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,16 +83,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bitrix_project.wsgi.application'
 
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} """
 
 
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'bitrixproject',
@@ -75,7 +101,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     }
-} """
+}
 
 
 # Password validation
@@ -97,8 +123,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
+""" REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+} """
 
 LANGUAGE_CODE = 'en-us'
 
@@ -114,7 +146,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/frontend/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "frontend/static")
-
-
-
-#django_heroku.settings(locals())

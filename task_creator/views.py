@@ -9,49 +9,56 @@ import json
 import os
 
 from .serializers import EmployeeSerializer, TaskSerializer, DailyTaskConnectorSerializer, CommentSerialzier
-from .models import Employee, Task, DailyTaskConnector, DailyTaskList, Comment
+from .models import Employee, Task, DailyTaskConnector, DailyTaskList, Comment, AuthModel
 
 from .utilities import EmployeeManager, TaskManager, not_found_response, success_response
 from task_creator.bitrix24 import BitrixIntegrator
 from .time_tracker import endView
 
 
+### Проверка ключа при добавлении задачи/комментария в битрикс
+### Если ключ существует - True - Действие в битрикс API осуществляется указанным ключом
+### Если ключа нет - действие запрещено
+
+def check_bitrix_token(token):
+    try:
+        AuthModel.objects.get(bitrix_token = token)
+        return True
+    except AuthModel.DoesNotExist:
+        return False
+
+
+### Получение индекса (приоритета) новой задачи = число добавленных задач + 1
 
 def get_last_task_index(employee_id):
     today = timezone.now().date()
     last_index = DailyTaskConnector.objects.filter(employee_id__bitrix_id = employee_id, task_list__date = today).aggregate(Max('priority'))
     return last_index['priority__max'] if last_index['priority__max'] else 0
 
+### Изменение приориета задач
 
-###FOR TEST##########
-def sort_priorities(employee_id, old_priority, new_priority):
-    updated_task = DailyTaskConnector.objects.get(employee_id__id = employee_id, priority = old_priority)
-    if new_priority > old_priority:
-        update_values = {
-            'range': (old_priority, new_priority),
-            'shift': -1
-        }
-    else:
-        update_values = {
-            'range': (new_priority, old_priority),
-            'shift': 1
-        }    
-    tasks_to_update = DailyTaskConnector.objects.get(employee_id__id = employee_id,
-        priority__range = (update_values.get('range'))).update(priority = F('priority') + update_values.get('shift'))
-    updated_task.update(priority = new_priority)
-    all_tasks = DailyTaskConnector.objects.filter(employe_id__id = employee_id)
-    print(all_tasks)
-####################
+@csrf_exempt
+def shiftTasksView(request):
 
-
-
-def createComment(connector, comment):
     bitrix = BitrixIntegrator()
+    tskManager = TaskManager(bitrix)
+        
+    if request.method == 'POST':
+        request_body = json.loads(request.body)
+        todolist = tskManager.get_todolist()
+        for user in request_body:
+            for index, task in enumerate(request_body[user]):
+                DailyTaskConnector.objects.filter(task_list= todolist, task__bitrix_id = int(task['taskId'])).update(priority = index + 1)
+        return success_response()
+
+def createComment(connector, comment, token):
+    bitrix = BitrixIntegrator(token)
     task = Task.objects.get(id = connector.task_id)
     task_id = task.bitrix_id
     new_comment = Comment(task_connector = connector, content = comment)
     new_comment.save()
-    bitrix.add_comment(task_id = task_id, comment = comment)
+    if task_id != -1:
+        bitrix.add_comment(task_id = task_id, comment = comment)
     return new_comment
 
 def addExistingTask(task):
@@ -75,15 +82,15 @@ def removeTaskFromDailyList(task_id, todolist):
         
 
 
-def addTaskToDailyList(task, todolist, employee_id, priority, comment = None):
+def addTaskToDailyList(task, todolist, employee_id, priority, comment = None, token = None):
     try:
         connector = DailyTaskConnector.objects.get(task = task, task_list = todolist)
     except DailyTaskConnector.DoesNotExist:
         employee = Employee.objects.get(bitrix_id = employee_id)
         connector = DailyTaskConnector(employee_id = employee, task_list = todolist, task = task, priority = priority)
         connector.save()
-        if comment:
-            createComment(connector = connector, comment = comment)
+        if comment and token:
+            createComment(connector = connector, comment = comment, token = token)
         serializer = DailyTaskConnectorSerializer(connector)
         return serializer
 
@@ -101,11 +108,14 @@ def dailyTaskManagerView(request, date):
 
 @csrf_exempt
 def commentManagerView(request, pk):
-    connector = DailyTaskConnector.objects.get(id = pk)
-    request_body = json.loads(request.body)
-    comment = request_body.get('comment')
-    createComment(connector = connector, comment = comment)
-    return success_response()
+    token = request.headers.get('Authorization').replace('Token ', '')
+    if check_bitrix_token(token):
+        connector = DailyTaskConnector.objects.get(id = pk)
+        request_body = json.loads(request.body)
+        comment = request_body.get('comment')
+        createComment(connector = connector, comment = comment, token = token)
+        return success_response()
+    return not_found_response()
 
 
 @csrf_exempt
@@ -151,24 +161,31 @@ def addTaskView(request, emplId):
 
 @csrf_exempt
 def createTaskView(request, emplId):
-    
-    bitrix = BitrixIntegrator()
-    tskManager = TaskManager(bitrix)
 
     if request.method == 'POST':
-        request_body = json.loads(request.body)
-        todolist = tskManager.get_todolist()
-        bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'))
         
-        task = bitrix_response['result']['task']
-        db_task = addExistingTask(task)
-        if db_task:
-            todolist = tskManager.get_todolist()
-            priority = get_last_task_index(emplId) + 1
-            new_task = addTaskToDailyList(task = db_task, todolist = todolist, employee_id = emplId, priority = priority, comment = request_body.get('comment'))
-            if new_task:
-                new_task.data['status'] = 200
-                return JsonResponse(new_task.data, safe = False, json_dumps_params={'ensure_ascii': False})
+        request_body = json.loads(request.body)
+        print(request_body)
+        token = request.headers.get('Authorization').replace('Token ', '')
+        if check_bitrix_token(token):
+            bitrix = BitrixIntegrator(token)
+            tskManager = TaskManager(bitrix)
+            if emplId in [406, 26, 334]:
+                employee = Employee.objects.get(bitrix_id = emplId)
+                db_task = Task(employee_id = employee, creator_id = employee, bitrix_id = -1, title = request_body.get('title'), description = '')
+                db_task.save()
+            else:
+                bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'))
+                task = bitrix_response['result']['task']
+                db_task = addExistingTask(task)
+            if db_task:
+                todolist = tskManager.get_todolist()
+                priority = get_last_task_index(emplId) + 1
+                new_task = addTaskToDailyList(task = db_task, todolist = todolist, employee_id = emplId,
+                    priority = priority, comment = request_body.get('comment'), token = token)
+                if new_task:
+                    new_task.data['status'] = 200
+                    return JsonResponse(new_task.data, safe = False, json_dumps_params={'ensure_ascii': False})
 
         return not_found_response()
 
@@ -215,21 +232,6 @@ def userManagerView(request):
     #######################################
 
 
-@csrf_exempt
-def shiftTasksView(request):
-
-    bitrix = BitrixIntegrator()
-    tskManager = TaskManager(bitrix)
-        
-    if request.method == 'POST':
-        request_body = json.loads(request.body)
-        todolist = tskManager.get_todolist()
-        for user in request_body:
-            for index, task in enumerate(request_body[user]):
-                DailyTaskConnector.objects.filter(task_list= todolist, task__bitrix_id = int(task['taskId'])).update(priority = index + 1)
-        return success_response()
-
-
 def createUser(data):
     serializer = EmployeeSerializer(data = data)
     if serializer.is_valid():
@@ -242,3 +244,25 @@ def updateUser(instance, data):
     serializer = EmployeeSerializer(instance, data = data, partial = True)
     if serializer.is_valid():
         serializer.save()
+
+
+
+###FOR TEST##########
+def sort_priorities(employee_id, old_priority, new_priority):
+    updated_task = DailyTaskConnector.objects.get(employee_id__id = employee_id, priority = old_priority)
+    if new_priority > old_priority:
+        update_values = {
+            'range': (old_priority, new_priority),
+            'shift': -1
+        }
+    else:
+        update_values = {
+            'range': (new_priority, old_priority),
+            'shift': 1
+        }    
+    tasks_to_update = DailyTaskConnector.objects.get(employee_id__id = employee_id,
+        priority__range = (update_values.get('range'))).update(priority = F('priority') + update_values.get('shift'))
+    updated_task.update(priority = new_priority)
+    all_tasks = DailyTaskConnector.objects.filter(employe_id__id = employee_id)
+    print(all_tasks)
+####################

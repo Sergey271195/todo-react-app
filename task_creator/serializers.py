@@ -1,8 +1,14 @@
-from .models import Employee, Task, Comment, DailyTaskConnector, DailyTaskList
+from .models import Employee, Task, Comment, DailyTaskConnector, DailyTaskList, AuthModel
 from django.utils import timezone
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
 import datetime
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 class EmployeeSerializer(serializers.Serializer):
     bitrix_id = serializers.IntegerField()
@@ -21,6 +27,14 @@ class EmployeeSerializer(serializers.Serializer):
         instance.is_main = vaildated_data.get('is_main', instance.is_main)
         instance.save()
         return instance
+
+class AuthModelSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
+
+    class Meta:
+        model = AuthModel
+        fields = '__all__'
 
 class TaskSerializer(serializers.Serializer):
 

@@ -11,22 +11,30 @@ import { DailyContext } from './context/DailyTasksContext';
 import DateHeader from './DateHeader';
 import LoadingScreen from './Loading';
 import NotFoundScreen from './NotFoundScreen';
-import GoodMorningGreeting from './GoodMorning';
 import MobileMenuButtons from './MobileMenuButtons';
 import { UserLoading } from './context/UserLoadingContext';
 import { MobileContext } from './context/MobileContext';
 import FilterUsersProvider from './context/FilterUsers';
 import DatepickerComponent from './DatepickerComponent';
 import { EmployeeContext } from './context/EmployeeContext';
+import { AuthContext } from './context/AuthContext';
+import { ViewsContext } from './context/ViewsContext';
+import LoginComponent from './authcomponents/LoginComponent';
+import SignupComponent from './authcomponents/SignupComponent';
 
 const Contorller = () => {
 
-    const [toggleMain, setToggleMain] = useState(true)
     const {loadingUser, setLoadingUser} = useContext(UserLoading)
     const [error, setError] = useState(false)
     const { dailyTasks, dispatchDaily } = useContext(DailyContext)
     const { currEmployee } = useContext(EmployeeContext)
-    const [ greeting, setGreeting ] = useState(false)
+
+    /* Auth part */
+    const { auth } = useContext(AuthContext)
+    const { view, dispatchView } = useContext(ViewsContext)
+
+    console.log(auth)
+    console.log(view)
     
     /* Mobile version */
     const { mobileMode, setMobileMode } = useContext(MobileContext);
@@ -43,6 +51,7 @@ const Contorller = () => {
 
     const fetchDailyTasks = (date) => {
         setLoadingUser(true)
+        dispatchView({type: 'LOADING'})
         fetch(`api/daily${date}`)
         .then((response) => {
             return response.json();
@@ -51,9 +60,9 @@ const Contorller = () => {
             if (data.status != 404) {
                 const dailyTasksId = data.map(({task: {bitrix_id}}) => bitrix_id)
                 const dailyList = prepareDailyList(data)
-                dailyTasksId.length == 0 ? setGreeting(true) : setGreeting(false)
                 dispatchDaily({type: 'GET_DAILY', tasks: dailyList, tasksId: dailyTasksId})
                 setError(false)
+                dispatchView({type: 'MAIN'})
                 setTimeout(setLoadingUser, 100, false)
             }
             else {
@@ -64,7 +73,7 @@ const Contorller = () => {
     }
 
     useEffect(() => {
-      getFromLocalStorage('employee') ? setToggleMain(false): setToggleMain(true)
+      getFromLocalStorage('employee') ? dispatchView({type: 'EMPLOYEE'}): dispatchView({type: 'MAIN'})
     }, [])
 
     useEffect(() => {
@@ -91,33 +100,51 @@ const Contorller = () => {
         return () => window.removeEventListener("resize", handleWindowResize)
     }, [])
 
+    if (mobileMode.mode) {
+        return (
+            <FilterUsersProvider>
+                <div className = 'mainDiv'>
+                        <div className = 'contentDiv'>
+                            <DateHeader fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/>
+                                {mobileDate ? <DatepickerComponent fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> : 
+                                <>  
+                                    {view.mobilemenu.show ? <EmployeeList /> : <>
+                                        {view.login.show ? <LoginComponent />:
+                                        <>
+                                        {view.signup.show ? <SignupComponent />:
+                                            <>
+                                            { loadingUser ? <LoadingScreen /> :
+                                                    <>{view.main.show ? <>{ error ? <NotFoundScreen /> :<DailyTasksList />}</>: <></>}
+                                                        {view.employee.show ? <>{currEmployee ? <TasksList /> : <DailyTasksList/>}</> : <></>}
+                                                    </>
+                                                }
+                                            </>}
+                                        </>}
+                                    </>}
+                                </>}
+                                <MobileMenuButtons />
+                        </div>
+                </div>
+            </FilterUsersProvider>
+        )
+    }
+
     return (
         <FilterUsersProvider>
             <div className = 'mainDiv'>
-                {mobileMode.mode ? <></>
-                : <EmployeeList setToggleMain = {setToggleMain}/>
-                }
+                <>
+                <EmployeeList />
                     <div className = 'contentDiv'>
-                        <DateHeader fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/>
-                            {mobileDate ? <DatepickerComponent fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> : 
-                            <>
-                                {mobileMode.menu ? <EmployeeList setToggleMain = {setToggleMain} /> : <>
+                        <DateHeader fetchDailyTasks = {fetchDailyTasks} mobileDate = {mobileDate} setMobileDate = {setMobileDate}/> 
+                            {view.login.show ? <LoginComponent />: <></>}
+                            {view.signup.show ? <SignupComponent />: <></>}
                                 { loadingUser ? <LoadingScreen /> :
-                                    <>{ greeting ? <GoodMorningGreeting /> :
-                                            <>{toggleMain ? 
-                                                <>{ error ? <NotFoundScreen /> :
-                                                    <DailyTasksList /> 
-                                                }</>
-                                                : <>{currEmployee ? <TasksList /> : <DailyTasksList/>}</>
-                                            }</>
-                                        }</>
-                                    }
-                                </>}
-                            </>}
-                            { mobileMode.mode ? <MobileMenuButtons setToggleMain = {setToggleMain}/>
-                                : <></> 
-                            }
+                                    <>{view.main.show ? <>{ error ? <NotFoundScreen /> :<DailyTasksList />}</>: <></>}
+                                        {view.employee.show ? <>{currEmployee ? <TasksList /> : <DailyTasksList/>}</> : <></>}
+                                    </>
+                                }
                     </div>
+                </>
             </div>
         </FilterUsersProvider>
     )

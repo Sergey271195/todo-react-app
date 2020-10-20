@@ -3,9 +3,9 @@ import os
 
 class BitrixIntegrator():
 
-    def __init__(self):
+    def __init__(self, token = None):
 
-        self.main_url = os.environ.get('BITRIX_KEY')
+        self.main_url = token if token else os.environ.get('BITRIX_KEY')
         self.users_dict = {}
         self.user_id_dict = {}
         self.id_list = []
@@ -95,6 +95,23 @@ class BitrixIntegrator():
         method_url = f'{self.main_url}/task.commentitem.add?TASKID={task_id}&FIELDS[POST_MESSAGE]={comment}'
         req = requests.get(method_url)
         response = req.json()
+
+    
+    def check_key(self, token):
+        try:
+            req = requests.get(f'{token}/profile')
+            response = req.json()
+            if response.get('error'):
+                return None
+            else:
+                return int(response.get('result').get('ID'))
+        except requests.exceptions.MissingSchema:
+            return None
+        except requests.exceptions.ConnectionError:
+            return None
+        
+
+
 
 
 if __name__ == "__main__":
