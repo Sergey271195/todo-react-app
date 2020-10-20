@@ -28,15 +28,12 @@ class EmployeeManager():
                 if int(id_) in self.mainemployee:
                     is_main = True
                 full_name = last_name + " " + first_name
-                employee = Employee(bitrix_id = int(id_), first_name = first_name, last_name = last_name, full_name = full_name, is_main = is_main)
+                if not photo:
+                    photo = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg"
+                employee = Employee(bitrix_id = int(id_), first_name = first_name,
+                    last_name = last_name, full_name = full_name, is_main = is_main, photo = photo)
                 print(employee)
                 employee.save()
-            else:
-                if photo:
-                    db_user.update(photo = photo)
-                else:
-                    db_user.update(photo = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg")
-                print(db_user.values())
 
     def delete_employee(self, id_):
         try:
@@ -46,6 +43,10 @@ class EmployeeManager():
             print('Employee do not exist')
 
     def get_all_employee(self):
+        employee = Employee.objects.all()
+        if not employee:
+            self.check_for_new_emloyee()
+            employee = Employee.objects.all()
         all_employee = [[employee.bitrix_id, employee.full_name] for employee in list(Employee.objects.all())]
         return all_employee
 

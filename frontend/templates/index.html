@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Todo App</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+</head>
+<style>
+    @font-face {
+      font-family: "FuturaPT";
+      src: url("{% static 'FuturaPT-Book.ttf' %}");
+    }
+    body {
+      font-family: "FuturaPT";
+    }
+</style>
+<body>
+  <div id = "app" style="height: 100%; width: 100%">
+    <!-- React goes here -->
+  </div>
+</body>
+<script src="{% static 'main.js' %}"></script>
+</html>

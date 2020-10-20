@@ -36,8 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')  == 'True'
 
-ALLOWED_HOSTS = ['*'] if DEBUG else ['bitrix-todo-app.herokuapp.com', 'localhost', '127.0.0.1',
- 'todo.illuminator3000.ru', 'http://todo.illuminator3000.ru/', '185.22.233.212', '185.22.233.212', '[::1]']
+ALLOWED_HOSTS = ['*'] if DEBUG else ['127.0.0.1', '[::1]']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,7 +66,7 @@ ROOT_URLCONF = 'bitrix_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'static/templates'), os.path.join(BASE_DIR, 'frontend/static/frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,30 +81,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bitrix_project.wsgi.application'
 
-
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-} """
-
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bitrixproject',
-        'USER': 'bitrixuser',
-        'PASSWORD': 'securebitrixpassword',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('DB_USER', 'db_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'db_password'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', ''),
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -122,16 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-""" REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
-} """
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Moscow'
@@ -144,5 +119,9 @@ USE_TZ = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_URL = '/frontend/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "frontend/static")
+STATIC_URL = 'staticfiles/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
+
+
+MEDIA_URL = "/mediafiles/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
