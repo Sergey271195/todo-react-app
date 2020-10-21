@@ -18,4 +18,4 @@ COPY . /usr/app
 COPY --from=0 usr/nodebuild/build /usr/app/frontend/static
 RUN rm -r  node
 
-CMD ["/bun/bash", "/usr/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/usr/app/entrypoint.sh"]

@@ -32,9 +32,6 @@ const Contorller = () => {
     /* Auth part */
     const { auth } = useContext(AuthContext)
     const { view, dispatchView } = useContext(ViewsContext)
-
-    console.log(auth)
-    console.log(view)
     
     /* Mobile version */
     const { mobileMode, setMobileMode } = useContext(MobileContext);
@@ -66,6 +63,7 @@ const Contorller = () => {
                 setTimeout(setLoadingUser, 100, false)
             }
             else {
+                dispatchView({type: 'MAIN'})
                 setError(true)
                 setLoadingUser(false)
             }

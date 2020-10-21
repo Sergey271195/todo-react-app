@@ -16,7 +16,7 @@ class EmployeeManager():
 
     def __init__(self, bitrix):
         self.bitrix = bitrix
-        self.mainemployee = [1, 26, 334, 370, 240, 262, 34, 416, 352, 330]
+        self.mainemployee = [26, 34, 262, 330, 334, 352, 370, 416, 436, 438]
 
     def check_for_new_emloyee(self):
         users_list = self.bitrix.get_all_users(["ID", "NAME", "LAST_NAME", "PERSONAL_PHOTO"])
@@ -65,7 +65,7 @@ class EmployeeManager():
         return employee
 
     def get_main(self):
-        mainemployee = [1, 26, 334, 370, 240, 262, 34, 416, 352, 330]
+        mainemployee = [26, 34, 262, 330, 334, 352, 370, 416, 436, 438]
         employee = Employee.objects.filter(bitrix_id__in = mainemployee)
         return employee
 

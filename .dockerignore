@@ -1,10 +1,9 @@
 backup/
 bitrix/
 .git
-frontend/static/frontend/main.js
-node_modules
+frontend/static/main.js
+node_modules/
 __pycache__/
-er.txt
 main.log
 db.sqlite3
 Procfile

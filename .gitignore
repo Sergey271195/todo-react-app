@@ -114,4 +114,4 @@ bitrix/
 er.txt
 main.log
 .env*
-static/
+frontend/static/main.js

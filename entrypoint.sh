@@ -1,9 +1,20 @@
 #!/bin/bash
 
-echo "Collecting static files"
-python manage.py collectstatic
+#if ["$DATABASE" = "postgres"]
+#then
+#    echo "Waiting for postgres..."
+#
+#    while ! nc -z $DB_HOST $DB_PORT; do
+#      sleep 0.1
+#    done
+#
+#    echo "PostgreSQL started"
+#fi
 
-echo "Migrate database"
-ptyhon manage.py migrate
+while ! nc -z db:5432 </dev/null; do sleep 5; done
 
-echo "Good luck"
+python /usr/app/manage.py migrate --noinput;
+python /usr/app/manage.py collectstatic --noinput;
+python /usr/app/manage.py populate;
+
+exec "$@"
