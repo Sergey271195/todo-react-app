@@ -1,5 +1,6 @@
-import React, {useContext, useState, useRef} from 'react'
+import React, {useContext} from 'react'
 import CommentComponent from './CommentComponent'
+import { AuthContext } from './context/AuthContext'
 import { DailyContext } from './context/DailyTasksContext'
 import { CurrentDate } from './context/DateContext'
 import { MobileContext } from './context/MobileContext'
@@ -18,8 +19,10 @@ const DailyTask = ({title: titleName, comments, completed, pk, index, employee,
     const { currentDate } = useContext(CurrentDate)
     const rightDate = (currentDate == getCurrentDate())
     const {mobileMode} = useContext(MobileContext)
+    const { auth } = useContext(AuthContext)
 
     const completeTask = () => {
+        if (auth.bitrix_id != emplId) return
         fetch(`api/tasks/complete${pk}`)
         .then((response) => {return response.json()})
         .then((data) => {

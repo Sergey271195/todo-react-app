@@ -22,20 +22,22 @@ def registerView(request):
             bitrix_key = bitrix_key[:-1]
         bitrix = BitrixIntegrator()
         bitrix_id = bitrix.check_key(bitrix_key)
-        try:
-            authmodel = AuthModel.objects.get(employee__bitrix_id = bitrix_id)
-            return JsonResponse({'STATUS_CODE': 500, 'MESSAGE': 'THE KEY FOR THIS BITRIX EMPLOYEE ALREADY EXISTS'})
-        except AuthModel.DoesNotExist:
+        if bitrix_id:
             try:
-                user = User.objects.create_user(username = request_body.get('username'), password = request_body.get('password'))
-                employee = Employee.objects.get(bitrix_id = bitrix_id)
-                authmodel = AuthModel(user = user, employee = employee, bitrix_token = bitrix_key, is_admin = False)
-                authmodel.save()
-                serializer = AuthModelSerializer(authmodel)
-                return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
-            except IntegrityError:
-                return JsonResponse({'STATUS_CODE': 500, 'MESSAGE': 'THIS USERNAME ALREADY EXISTS'})
-
+                authmodel = AuthModel.objects.get(employee__bitrix_id = bitrix_id)
+                return JsonResponse({'STATUS_CODE': 500, 'MESSAGE': 'THE KEY FOR THIS BITRIX EMPLOYEE ALREADY EXISTS'})
+            except AuthModel.DoesNotExist:
+                try:
+                    user = User.objects.create_user(username = request_body.get('username'), password = request_body.get('password'),
+                    first_name = request_body.get('firstname'), last_name = request_body.get('lastname'))
+                    employee = Employee.objects.get(bitrix_id = bitrix_id)
+                    authmodel = AuthModel(user = user, employee = employee, bitrix_token = bitrix_key, is_admin = False)
+                    authmodel.save()
+                    serializer = AuthModelSerializer(authmodel)
+                    return JsonResponse(serializer.data, safe = False, json_dumps_params={'ensure_ascii': False})
+                except IntegrityError:
+                    return JsonResponse({'STATUS_CODE': 500, 'MESSAGE': 'THIS USERNAME ALREADY EXISTS'})
+        return JsonResponse({'STATUS_CODE': 500, 'MESSAGE': 'INVALID BITRIX KEY'})
 
 @csrf_exempt
 def loginView(request):

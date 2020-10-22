@@ -21,9 +21,10 @@ const DateHeader = ({fetchDailyTasks, mobileDate, setMobileDate}) => {
     return (
         <div className = 'headerDiv' style = {mode ? {...DARK, ...DARKBACKGROUND} : {...LIGHT, ...LIGHTBACKGROUND}}>
             <div className = 'dateWeek'>{formatDate(currentDate)}</div>
+                {auth.firstname ? <div>{auth.firstname} {auth.lastname}</div> : <div>{auth.username}</div> }
                 <div className = {'dateAndLoginContainer ' + (mobileMode.mode ? '': 'normal')}>
                     {mobileMode.mode ? <BiCalendarWeek className = 'dateIcon' onClick = {() => setMobileDate(!mobileDate)}/> :
-                    <> 
+                    <>
                     <input type = 'date' className = 'dateInput' title = 'Просмотр списка задач всех сотрудников за выбранную дату'
                         onChange = {(event) => {setCurrentDate(event.target.value), fetchDailyTasks(event.target.value)}}/>
                     {auth.authenticated ? 
@@ -32,7 +33,6 @@ const DateHeader = ({fetchDailyTasks, mobileDate, setMobileDate}) => {
                             dispatchAuth({type: 'LOGOUT'}),
                             dispatchView({type: 'LOGIN'})
                         }} className = 'loginIcons'/>
-                        <div>{auth.username}</div>
                     </div>
                     :
                     <div style = {{display: 'flex', flexDirection: 'column', alignItems: 'center'}}> 

@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState } from 'react'
 import {BiPauseCircle, BiTimeFive} from 'react-icons/bi'
+import { AuthContext } from './context/AuthContext'
 import { DailyContext } from './context/DailyTasksContext'
 
 const handleTime = (time) => {
@@ -20,7 +21,9 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
         total: 0
     })
 
-    const managersIds = [26, 334, 406]
+    const { auth } = useContext(AuthContext)
+
+    const managersIds = [26, 334]
 
     const { active, startingTime, totalTime } = time
     const { dailyTasks, dispatchDaily } = useContext(DailyContext)
@@ -56,6 +59,7 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
 
 
     const startTracking = () => {
+        if (auth.bitrix_id != emplId) return
         if (dailyTasks.tasks[employee][index].completed) return
         const activeArray = dailyTasks.tasks[employee].filter(item => item.time.active)
         if (activeArray.length > 0) return
@@ -66,6 +70,7 @@ const TimeTracker = ({emplId, taskId, time, rightDate, employee, index}) => {
     }
 
     const stopTracking = () => {
+        if (auth.bitrix_id != emplId) return
         dispatchDaily({type: 'SWITCH_ACTIVE', taskId, active})
         fetch(`api/time/end&user${emplId}&task${taskId}`)
             .then(response => response.json())

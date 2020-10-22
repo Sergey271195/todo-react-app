@@ -16,7 +16,9 @@ const SignupComponent = () => {
     const [ formData, setFormData ] = useState({
         bitrix_key: '',
         username: '',
-        password: ''
+        password: '',
+        firstname: '',
+        lastname: '',
     })
 
     const logInUser = (event) => {
@@ -35,7 +37,9 @@ const SignupComponent = () => {
         setFormData({
             bitrix_key: '',
             username: '',
-            password: ''
+            password: '',
+            firstname: '',
+            lastname: '',
         })
     }
 
@@ -46,6 +50,12 @@ const SignupComponent = () => {
                 <div>Логин</div>
                 <input className = 'authInput' placeholder = 'Логин' value = {formData.username} type = 'text'
                     onChange = {(event) => setFormData({...formData, username: event.target.value})}/>
+                <div>Имя</div>
+                <input className = 'authInput' placeholder = 'Имя' value = {formData.firstname} type = 'text'
+                    onChange = {(event) => setFormData({...formData, firstname: event.target.value})}/>
+                <div>Фамилия</div>
+                <input className = 'authInput' placeholder = 'Фамилия' value = {formData.lastname} type = 'text'
+                    onChange = {(event) => setFormData({...formData, lastname: event.target.value})}/>
                 <div>Пароль</div>
                 <input className = 'authInput' placeholder = 'Пароль' value = {formData.password} type = 'password'
                     onChange = {(event) => setFormData({...formData, password: event.target.value})}/>

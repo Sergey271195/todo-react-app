@@ -21,6 +21,11 @@ from .time_tracker import endView
 ### Если ключа нет - действие запрещено
 
 def check_bitrix_token(token):
+    al = AuthModel.objects.all()
+    print('auth')
+    for a in al:
+        
+        print(a.__dict__)
     try:
         AuthModel.objects.get(bitrix_token = token)
         return True
@@ -165,12 +170,11 @@ def createTaskView(request, emplId):
     if request.method == 'POST':
         
         request_body = json.loads(request.body)
-        print(request_body)
         token = request.headers.get('Authorization').replace('Token ', '')
         if check_bitrix_token(token):
             bitrix = BitrixIntegrator(token)
             tskManager = TaskManager(bitrix)
-            if emplId in [406, 26, 334]:
+            if emplId in [26, 334]:
                 employee = Employee.objects.get(bitrix_id = emplId)
                 db_task = Task(employee_id = employee, creator_id = employee, bitrix_id = -1, title = request_body.get('title'), description = '')
                 db_task.save()
