@@ -43,8 +43,9 @@ class DailyTaskConnector(models.Model):
     total_time = models.IntegerField(default = 0)
 
 class Comment(models.Model):
+    
     task_connector = models.ForeignKey(DailyTaskConnector, on_delete=models.CASCADE)
-    creator = models.ForeignKey(Employee, on_delete= models.CASCADE, blank = True, null = True)
+    creator = models.ForeignKey(User, on_delete= models.CASCADE, blank = True, null = True)
     content = models.TextField()
 
 

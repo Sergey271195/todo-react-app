@@ -5,7 +5,7 @@ export const DailyTasksReducer = (state, action) => {
         }
         case 'ADD_COMMENT': {
             state.tasks[action.employee][action.index].comments = 
-            [...state.tasks[action.employee][action.index].comments, {'content': action.comment}]
+            [...state.tasks[action.employee][action.index].comments, {'content': action.comment, 'creator': {'first_name': action.first_name, 'last_name': action.last_name}}]
             return {...state}
         }
         case 'EXTEND_DAILY': {

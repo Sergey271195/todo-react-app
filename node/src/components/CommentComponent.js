@@ -21,7 +21,8 @@ const CommentComponent = ({comments, rightDate, pk, index, employee}) => {
             postFetchAuth({url: `api/tasks/comment${pk}`, data: {comment: commentInput}, token: auth.key})
                 .then((data) => {
                     if (data.status == 200) {
-                        dispatchDaily({type: 'ADD_COMMENT', index: index, employee: employee, comment: commentInput})
+                        dispatchDaily({type: 'ADD_COMMENT', index: index, employee: employee, comment: commentInput,
+                            first_name: auth.firstname, last_name: auth.lastname})
                         setCommentInput('')
                     }
                 })
@@ -43,9 +44,9 @@ const CommentComponent = ({comments, rightDate, pk, index, employee}) => {
     ) 
 }
 
-const CommentItem = ({comment: {content}}) => {
+const CommentItem = ({comment: {content, creator}}) => {
     return (
-        <div className = 'commentDiv'>{content}</div>
+        <div className = 'commentDiv'>{creator ? `${creator.first_name} ${creator.last_name}:`: ''} {content}</div>
     )
 }
 

@@ -95,4 +95,5 @@ class TimeTrackerSerializer(serializers.Serializer):
 
 class CommentSerialzier(serializers.Serializer):
 
+    creator = UserSerializer()
     content = serializers.CharField()

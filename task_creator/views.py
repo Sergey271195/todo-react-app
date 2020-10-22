@@ -57,10 +57,11 @@ def shiftTasksView(request):
         return success_response()
 
 def createComment(connector, comment, token):
+    user = AuthModel.objects.get(bitrix_token = token).user
     bitrix = BitrixIntegrator(token)
     task = Task.objects.get(id = connector.task_id)
     task_id = task.bitrix_id
-    new_comment = Comment(task_connector = connector, content = comment)
+    new_comment = Comment(task_connector = connector, content = comment, creator = user)
     new_comment.save()
     if task_id != -1:
         bitrix.add_comment(task_id = task_id, comment = comment)
