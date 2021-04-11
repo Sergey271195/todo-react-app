@@ -9,7 +9,9 @@ class Employee(models.Model):
     full_name = models.CharField(max_length = 50)
     is_main = models.BooleanField(default = False)
     photo = models.CharField(max_length = 300, default = "https://upload.wikimedia.org/wikipedia/commons/7/7c/User_font_awesome.svg", blank=True, null=True)
-    
+
+    def __str__(self):
+        return f"{self.full_name} - {self.bitrix_id} - {self.is_main}"    
 
 class AuthModel(models.Model):
     employee = models.ForeignKey(Employee, related_name = 'auth', on_delete = models.CASCADE)
@@ -17,6 +19,8 @@ class AuthModel(models.Model):
     is_admin = models.BooleanField(default = False)
     bitrix_token = models.CharField(max_length = 200, null = True, blank = True)
 
+    def __str__(self):
+        return f"{self.employee[full_name]} - {self.employee[bitrix_id]}" 
 
 class Task(models.Model):
     employee_id = models.ForeignKey(Employee, related_name='employee', on_delete=models.CASCADE)
@@ -27,6 +31,9 @@ class Task(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     deadline = models.DateField(blank = True, null = True)
+
+    def __str__(self):
+        return f"Bitrix_id:{self.bitrix_id} - {self.title}. Creator: {creator_id}. Employee: {employee_id}" 
 
 class DailyTaskList(models.Model):
     date = models.DateField(default = datetime.datetime.now, blank = True, unique = True)

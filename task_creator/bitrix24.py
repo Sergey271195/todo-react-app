@@ -63,19 +63,27 @@ class BitrixIntegrator():
         return cache_tasks
 
     def get_all_user_tasks(self, id_):
-
+        print("AVAILABLE")
+        tasks = self.get_available_groups()
+        print(tasks)
+        print(len(tasks.get('result')))
+        for t in tasks.get('result'):
+            print(t.get('ID'), t.get('NAME'), t.get('ACTIVE'), t.get('VISIBLE'), 'CLOSED:', t.get('CLOSED'))
         cache_tasks = []
         query = self.build_query('tasks.task.list', filterParam=[['STATUS', '2'], ['RESPONSIBLE_ID', id_]])
-        print(query)
         self.get_next(query, 0, cache_tasks)
         query = self.build_query('tasks.task.list', filterParam=[['STATUS', '3'], ['RESPONSIBLE_ID', id_]])
+        self.get_next(query, 0, cache_tasks)
+        query = self.build_query('tasks.task.list', filterParam=[['STATUS', '2'], ['ACCOMPLICE', id_], ['!RESPONSIBLE_ID', id_]])
+        self.get_next(query, 0, cache_tasks)
+        query = self.build_query('tasks.task.list', filterParam=[['STATUS', '3'], ['ACCOMPLICE', id_], ['!RESPONSIBLE_ID', id_]])
         self.get_next(query, 0, cache_tasks)
         return cache_tasks
 
     def add_task(self, fields):
         method_url = f'{self.main_url}/tasks.task.add?'
         fields = '&'.join([f'fields[{key}]={value}' for key, value in fields.items()])
-        request_url = method_url + fields + '&fields[AUDITORS][0]=26&fields[AUDITORS][1]=1&fields[CREATED_BY_NAME]=Нея'
+        request_url = method_url + fields + '&fields[AUDITORS][0]=26&fields[AUDITORS][1]=1&fields[ALLOW_TIME_TRACKING]=Y'
         req = requests.get(request_url)
         json_ = req.json()
         return json_
@@ -96,6 +104,18 @@ class BitrixIntegrator():
         req = requests.get(method_url)
         response = req.json()
 
+    def get_task_fields(self):
+        method_url = f'{self.main_url}/tasks.task.getfields'
+        req = requests.get(method_url)
+        response = req.json()
+        return response
+
+    
+    def get_active_groups(self):
+        method_url = f'{self.main_url}/sonet_group.get?IS_ADMIN=Y&FILTER[%CLOSED]=N&FILTER[%ACTIVE]=Y'
+        req = requests.get(method_url)
+        response = req.json()
+        return response
     
     def check_key(self, token):
         try:
@@ -110,9 +130,6 @@ class BitrixIntegrator():
         except requests.exceptions.ConnectionError:
             return None
         
-
-
-
 
 if __name__ == "__main__":
     bitrix = BitrixIntegrator()

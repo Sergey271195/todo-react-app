@@ -251,6 +251,17 @@ def updateUser(instance, data):
         serializer.save()
 
 
+def getActiveGroupsForTaskCreation(request):
+    bitrix = BitrixIntegrator()
+    if request.method == 'GET':
+        try:
+            active_groups = bitrix.get_active_groups()
+            return JsonResponse(active_groups, safe = False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            print(e)
+            return not_found_response()
+
+
 
 ###FOR TEST##########
 def sort_priorities(employee_id, old_priority, new_priority):
