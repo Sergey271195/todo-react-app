@@ -180,7 +180,7 @@ def createTaskView(request, emplId):
                 db_task = Task(employee_id = employee, creator_id = employee, bitrix_id = -1, title = request_body.get('title'), description = '')
                 db_task.save()
             else:
-                bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'))
+                bitrix_response = tskManager.create_task(employee = emplId, title = request_body.get('title'), groupId = request_body.get("groupId"))
                 task = bitrix_response['result']['task']
                 db_task = addExistingTask(task)
             if db_task:

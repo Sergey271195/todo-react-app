@@ -84,9 +84,7 @@ class TaskManager():
     ###Changes here
 
     def clean_yesterday(self):
-        print('Creating new date object')
         yesterday = (timezone.localtime(timezone.now()) - datetime.timedelta(days = 1)).date()
-        print('Cleaning yesterday')
         yesterday_tasks = self.get_daily_tasks(yesterday)
         if yesterday_tasks:
             for task in yesterday_tasks:
@@ -101,12 +99,10 @@ class TaskManager():
 
     def get_todolist(self):
         print(inspect.stack()[1].function)
-        try:
-            print('Commented function')            
+        try:          
             todolist = DailyTaskList.objects.get(date = datetime.date.today())
             return todolist
         except DailyTaskList.DoesNotExist:
-            print('Commented function creating new entry')
             todolist = DailyTaskList(date = datetime.date.today())
             todolist.save()
             self.clean_yesterday()
@@ -114,11 +110,9 @@ class TaskManager():
 
     def get_todolist_by_date(self, date):
         try:
-            print('Uncommented func')
             todolist = DailyTaskList.objects.get(date = date)
             return todolist
         except DailyTaskList.DoesNotExist:
-            print('Uncommented func returning none')
             return None
 
     def get_daily_tasks(self, date):
@@ -159,8 +153,8 @@ class TaskManager():
         connector = DailyTaskConnector(task_list = todolist, task = task)
         connector.save()
 
-    def create_task(self, employee, title):
-        fields = {'TITLE': title, 'RESPONSIBLE_ID': employee, 'CREATED_BY': employee, 'STATUS': 3, 'DESCRIPTION': ''}
+    def create_task(self, employee, title, groupId):
+        fields = {'TITLE': title, 'RESPONSIBLE_ID': employee, 'CREATED_BY': employee, 'STATUS': 3, 'DESCRIPTION': '', "GROUP_ID": groupId}
         new_task = self.bitrix.add_task(fields)
         return new_task
 

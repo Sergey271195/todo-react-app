@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import (userManagerView, addTaskView, dailyTaskManagerView,
                     commentManagerView, completeTaskView,
-                    createTaskView, shiftTasksView)
+                    createTaskView, shiftTasksView, getActiveGroupsForTaskCreation)
 from .time_tracker import startView, endView
 from .auth import loginView, registerView
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('tasks/complete<int:pk>', completeTaskView),
     path('tasks/create<int:emplId>', createTaskView),
     path('tasks/shift', shiftTasksView),
+    path('tasks/groups', getActiveGroupsForTaskCreation),
 
     ### Time views
     path('time/start&user<int:user_id>&task<int:task_id>', startView),

@@ -63,12 +63,7 @@ class BitrixIntegrator():
         return cache_tasks
 
     def get_all_user_tasks(self, id_):
-        print("AVAILABLE")
-        tasks = self.get_available_groups()
-        print(tasks)
-        print(len(tasks.get('result')))
-        for t in tasks.get('result'):
-            print(t.get('ID'), t.get('NAME'), t.get('ACTIVE'), t.get('VISIBLE'), 'CLOSED:', t.get('CLOSED'))
+
         cache_tasks = []
         query = self.build_query('tasks.task.list', filterParam=[['STATUS', '2'], ['RESPONSIBLE_ID', id_]])
         self.get_next(query, 0, cache_tasks)
@@ -110,12 +105,22 @@ class BitrixIntegrator():
         response = req.json()
         return response
 
-    
+    def get_next_group(self, query, start, cache):
+        request = requests.get(query+f'&start={start}')
+        if request.status_code == 200:
+            response = request.json()
+            cache.extend(response.get('result'))
+            next_ = response.get('next')
+            if next_:
+                self.get_next(query, next_, cache)
+        else:
+            return 'status 404'
+
     def get_active_groups(self):
         method_url = f'{self.main_url}/sonet_group.get?IS_ADMIN=Y&FILTER[%CLOSED]=N&FILTER[%ACTIVE]=Y'
-        req = requests.get(method_url)
-        response = req.json()
-        return response
+        groups_list = []
+        self.get_next_group(method_url, 0, groups_list)
+        return groups_list
     
     def check_key(self, token):
         try:
