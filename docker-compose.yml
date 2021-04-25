@@ -34,5 +34,6 @@ services:
 
 volumes:
     postgres_data:
+        name: docker_postgres_data
     static_files:
     logs:

@@ -20,7 +20,7 @@ class AuthModel(models.Model):
     bitrix_token = models.CharField(max_length = 200, null = True, blank = True)
 
     def __str__(self):
-        return f"{self.employee[full_name]} - {self.employee[bitrix_id]}" 
+        return f"{self.employee.full_name} - {self.employee.bitrix_id}" 
 
 class Task(models.Model):
     employee_id = models.ForeignKey(Employee, related_name='employee', on_delete=models.CASCADE)
@@ -33,7 +33,7 @@ class Task(models.Model):
     deadline = models.DateField(blank = True, null = True)
 
     def __str__(self):
-        return f"Bitrix_id:{self.bitrix_id} - {self.title}. Creator: {creator_id}. Employee: {employee_id}" 
+        return f"Bitrix_id:{self.bitrix_id} - {self.title}. Creator: {self.creator_id}. Employee: {self.employee_id}" 
 
 class DailyTaskList(models.Model):
     date = models.DateField(default = datetime.datetime.now, blank = True, unique = True)

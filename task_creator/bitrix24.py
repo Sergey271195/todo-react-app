@@ -121,6 +121,13 @@ class BitrixIntegrator():
         groups_list = []
         self.get_next_group(method_url, 0, groups_list)
         return groups_list
+
+    def get_user_active_groups(self):
+
+        method_url = f'{self.main_url}/sonet_group.user.groups'
+        groups_list = []
+        self.get_next_group(method_url, 0, groups_list)
+        return groups_list
     
     def check_key(self, token):
         try:

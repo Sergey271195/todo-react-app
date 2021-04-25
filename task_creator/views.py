@@ -252,14 +252,18 @@ def updateUser(instance, data):
 
 
 def getActiveGroupsForTaskCreation(request):
-    bitrix = BitrixIntegrator()
     if request.method == 'GET':
+        #request_body = json.loads(request.body)
+        #token = request.headers.get('Authorization').replace('Token ', '')
+        #if check_bitrix_token(token):
+        bitrix = BitrixIntegrator(""" token """)
         try:
             active_groups = bitrix.get_active_groups()
             return JsonResponse(active_groups, safe = False, json_dumps_params={'ensure_ascii': False})
         except Exception as e:
             print(e)
             return not_found_response()
+        return not_found_response()
 
 
 
