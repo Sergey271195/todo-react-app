@@ -46,14 +46,14 @@
     padding-bottom: 2px;
 }
 
-::-webkit-datetime-edit { display: none }
-::-webkit-datetime-edit-fields-wrapper {  display: none }
-::-webkit-datetime-edit-text { display: none }
-::-webkit-datetime-edit-month-field {  display: none }
-::-webkit-datetime-edit-day-field {  display: none }
-::-webkit-datetime-edit-year-field { display: none }
-::-webkit-inner-spin-button { display: none; }
-::-webkit-calendar-picker-indicator {
+.dateInput::-webkit-datetime-edit { display: none }
+.dateInput::-webkit-datetime-edit-fields-wrapper {  display: none }
+.dateInput::-webkit-datetime-edit-text { display: none }
+.dateInput::-webkit-datetime-edit-month-field {  display: none }
+.dateInput::-webkit-datetime-edit-day-field {  display: none }
+.dateInput::-webkit-datetime-edit-year-field { display: none }
+.dateInput::-webkit-inner-spin-button { display: none; }
+.dateInput::-webkit-calendar-picker-indicator {
     cursor: pointer;
     font-size: 16px;
     content: url('https://api.iconify.design/bx:bx-calendar-week.svg');

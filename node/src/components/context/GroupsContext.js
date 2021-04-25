@@ -6,7 +6,7 @@ const GroupsContextProvider = ({ children }) => {
     const [groups, setGroups] = useState();
 
     useEffect(() => {
-        fetch(`api/tasks/groups`)
+        fetch(`/api/tasks/groups`)
             .then((response) => response.json())
             .then((data) => setGroups(data));
     }, []);

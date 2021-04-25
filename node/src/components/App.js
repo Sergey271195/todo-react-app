@@ -1,5 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import EmployeeContextProvider from "./context/EmployeeContext";
 import DailyContextProvider from "./context/DailyTasksContext";
@@ -13,6 +14,7 @@ import Contorller from "./Controller";
 import AuthContextProvider from "./context/AuthContext";
 import ViewsContextProvider from "./context/ViewsContext";
 import GroupsContextProvider from "./context/GroupsContext";
+import TaskAdminMain from "./taskadmin/TaskAdminMain";
 
 const App = () => {
     return (
@@ -26,7 +28,16 @@ const App = () => {
                                     <ModeContextProvider>
                                         <MobileContextProvider>
                                             <GroupsContextProvider>
-                                                <Contorller />
+                                                <Router>
+                                                    <Switch>
+                                                        <Route path="/taskadmin">
+                                                            <TaskAdminMain />
+                                                        </Route>
+                                                        <Route path="/">
+                                                            <Contorller />
+                                                        </Route>
+                                                    </Switch>
+                                                </Router>
                                             </GroupsContextProvider>
                                         </MobileContextProvider>
                                     </ModeContextProvider>
