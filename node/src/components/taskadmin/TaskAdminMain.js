@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GroupsContext } from "../context/GroupsContext";
 import "../../styles/Admin.css";
+import { getCurrentDate, getCurrentMonthStart } from "../Utils";
 
 const handleTime = (time) => {
     return {
@@ -16,12 +17,12 @@ const TaskAdminMain = () => {
     const [selectedGroup, setSelectedGroup] = useState("");
     const [tasksList, setTasksList] = useState();
     const [datePeriod, setDatePeriod] = useState({
-        startDate: "",
-        endDate: "",
+        startDate: getCurrentDate(),
+        endDate: getCurrentMonthStart(),
     });
     const [projectTotalTime, setProjectTotalTime] = useState();
 
-    useEffect(() => {
+    const fetchProjectData = () => {
         if (
             selectedGroup &&
             selectedGroup !== "" &&
@@ -38,7 +39,7 @@ const TaskAdminMain = () => {
                     setProjectTotalTime(handleTime(data.project_time));
                 });
         }
-    }, [selectedGroup]);
+    };
 
     return (
         <div style={{ padding: "20px" }}>
@@ -54,6 +55,7 @@ const TaskAdminMain = () => {
                             startDate: event.target.value,
                         });
                     }}
+                    value={datePeriod.startDate}
                 />
                 <label style={{ marginRight: "10px" }}>По</label>
                 <input
@@ -65,6 +67,7 @@ const TaskAdminMain = () => {
                             endDate: event.target.value,
                         });
                     }}
+                    value={datePeriod.endDate}
                 />
             </div>
             <div>
@@ -94,6 +97,11 @@ const TaskAdminMain = () => {
                     </select>
                 )}
             </div>
+            <div>
+                <button type="submit" onClick={fetchProjectData}>
+                    Получить данные
+                </button>
+            </div>
             {projectTotalTime && (
                 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                     Общее время, затраченное на проект за указанный период:{" "}
@@ -109,7 +117,7 @@ const TaskAdminMain = () => {
                 </div>
             )}
             <div>
-                {tasksList && (
+                {tasksList && tasksList.length > 0 && (
                     <table>
                         <thead>
                             <tr>
