@@ -19,7 +19,7 @@ def startView(request, user_id, task_id):
 
     try:
         todolist = tskManager.get_todolist()
-        task = DailyTaskConnector.objects.get(task__bitrix_id = task_id, task_list = todolist)
+        task = DailyTaskConnector.objects.get(task__bitrix_id = task_id, task_list = todolist, employee_id__bitrix_id = user_id)
         task.starting_time = timezone.localtime(timezone.now())
         task.active = True
         task.save()
@@ -37,7 +37,7 @@ def endView(request, task_id, user_id):
 
     try:
         todolist = tskManager.get_todolist()
-        task = DailyTaskConnector.objects.get(task__bitrix_id = task_id, task_list = todolist)
+        task = DailyTaskConnector.objects.get(task__bitrix_id = task_id, task_list = todolist, employee_id__bitrix_id = user_id)
         delta_time = (timezone.localtime(timezone.now()) - task.starting_time).total_seconds()
         bitrix.save_time_to_bitrix(user_id, task_id, timezone.localtime(task.starting_time), delta_time)
         task.total_time += delta_time

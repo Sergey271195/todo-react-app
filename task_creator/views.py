@@ -129,7 +129,7 @@ def removeTaskFromDailyList(task_id, todolist):
 
 def addTaskToDailyList(task, todolist, employee_id, priority, comment=None, token=None):
     try:
-        connector = DailyTaskConnector.objects.get(task=task, task_list=todolist)
+        connector = DailyTaskConnector.objects.get(task=task, task_list=todolist, employee_id = employee_id)
     except DailyTaskConnector.DoesNotExist:
         employee = Employee.objects.get(bitrix_id=employee_id)
         connector = DailyTaskConnector(
@@ -381,7 +381,6 @@ def sort_priorities(employee_id, old_priority, new_priority):
     ).update(priority=F("priority") + update_values.get("shift"))
     updated_task.update(priority=new_priority)
     all_tasks = DailyTaskConnector.objects.filter(employe_id__id=employee_id)
-    print(all_tasks)
 
 
 ####################

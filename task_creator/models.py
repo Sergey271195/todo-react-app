@@ -37,6 +37,8 @@ class Task(models.Model):
 
 class DailyTaskList(models.Model):
     date = models.DateField(default = datetime.datetime.now, blank = True, unique = True)
+    def __str__(self):
+        return f"Date: {self.date}"
 
 class DailyTaskConnector(models.Model):
     employee_id = models.ForeignKey(Employee, on_delete = models.CASCADE)
