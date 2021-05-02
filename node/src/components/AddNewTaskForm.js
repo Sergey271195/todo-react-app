@@ -99,10 +99,10 @@ const AddNewTaskForm = ({ emplId, mainList }) => {
                                     {groups.map((group) => {
                                         return (
                                             <option
-                                                key={group.ID}
-                                                value={group.ID}
+                                                key={group.GROUP_ID}
+                                                value={group.GROUP_ID}
                                             >
-                                                {group.NAME}
+                                                {group.GROUP_NAME}
                                             </option>
                                         );
                                     })}

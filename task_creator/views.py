@@ -40,10 +40,9 @@ from .time_tracker import endView
 
 def check_bitrix_token(token):
     al = AuthModel.objects.all()
-    print("auth")
+    """ print("auth")
     for a in al:
-
-        print(a.__dict__)
+        print(a.__dict__) """
     try:
         AuthModel.objects.get(bitrix_token=token)
         return True
@@ -336,18 +335,17 @@ def updateUser(instance, data):
 
 def getActiveGroupsForTaskCreation(request):
     if request.method == "GET":
-        # request_body = json.loads(request.body)
-        # token = request.headers.get('Authorization').replace('Token ', '')
-        # if check_bitrix_token(token):
-        bitrix = BitrixIntegrator()
-        try:
-            active_groups = bitrix.get_active_groups()
-            return JsonResponse(
-                active_groups, safe=False, json_dumps_params={"ensure_ascii": False}
-            )
-        except Exception as e:
-            print(e)
-            return not_found_response()
+        token = request.headers.get('Authorization').replace('Token ', '')
+        if check_bitrix_token(token):
+            bitrix = BitrixIntegrator(token)
+            try:
+                active_groups = bitrix.get_user_active_groups()
+                return JsonResponse(
+                    active_groups, safe=False, json_dumps_params={"ensure_ascii": False}
+                )
+            except Exception as e:
+                print("Get active groups exception:", e)
+                return not_found_response()
         return not_found_response()
 
 

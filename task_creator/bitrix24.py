@@ -1,5 +1,6 @@
 import requests
 import os
+import re
 from datetime import datetime, timedelta
 
 class BitrixIntegrator:
@@ -149,9 +150,8 @@ class BitrixIntegrator:
         self.get_next_group(method_url, 0, groups_list)
         return groups_list
 
-    # TODO
     def get_user_active_groups(self):
-        method_url = f"{self.main_url}/sonet_group.user.groups"
+        method_url = f"{self.main_url}/sonet_group.user.groups?IS_ADMIN=Y&FILTER[%CLOSED]=N&FILTER[%ACTIVE]=Y"
         groups_list = []
         self.get_next_group(method_url, 0, groups_list)
         return groups_list
@@ -207,6 +207,13 @@ class BitrixIntegrator:
         except requests.exceptions.ConnectionError:
             return None
 
+    @staticmethod
+    def get_id_from_token(self, token):
+        regex = re.compile("https://illuminator3000.bitrix24.ru/rest/(?P<bitrixId>[0-9]+)/")
+        result = re.search(regex, token)
+        if result:
+            bitrix_id = int(result.group("bitrixId"))
+            return bitrix_id
 
 if __name__ == "__main__":
     bitrix = BitrixIntegrator()
